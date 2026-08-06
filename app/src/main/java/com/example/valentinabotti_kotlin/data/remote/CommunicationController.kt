@@ -19,7 +19,7 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.encodeToString
 
 object CommunicationController {
-    val BASE_URL = "https://develop.ewlab.di.unimi.it/mc/2425"
+    val BASE_URL = "http://10.0.2.2:5077/api"//localhost
     var sid: String? = null
     private val TAG = CommunicationController::class.simpleName
 

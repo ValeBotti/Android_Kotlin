@@ -29,7 +29,7 @@ object ApiCalls {
     suspend fun postCreateUser(): UidSid {
         Log.d(TAG, "postCreateUser")
 
-        val url = "${CommunicationController.BASE_URL}/user"
+        val url = "${CommunicationController.BASE_URL}/session/create"
 
         return try {
             val httpResponse =

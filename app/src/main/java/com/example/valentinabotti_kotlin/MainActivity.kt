@@ -24,7 +24,6 @@ import com.example.valentinabotti_kotlin.model.Screen
 import com.example.valentinabotti_kotlin.viewmodel.MainActivityViewModel
 import com.example.valentinabotti_kotlin.viewmodel.retrieveCurrentPage
 import com.example.valentinabotti_kotlin.viewmodel.saveCurrentPage
-
 class MainActivity : ComponentActivity() {
 
     private val mainActivityViewModel by viewModels<MainActivityViewModel>()
@@ -32,9 +31,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("Lifecycle", "onCreate called")
         super.onCreate(savedInstanceState)
-
-        mainActivityViewModel.retriveSidUid(context = this)
-
 
         enableEdgeToEdge()
 
