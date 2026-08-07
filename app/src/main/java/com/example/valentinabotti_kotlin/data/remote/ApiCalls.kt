@@ -281,7 +281,7 @@ object ApiCalls {
         Log.d(TAG, "postMenu")
         Log.d("postMenu", "MID: $mid SID: $sid LAT: $lat LNG: $lng")
 
-        val url = "${CommunicationController.BASE_URL}/menu/${mid}/buy"
+        val url = "${CommunicationController.BASE_URL}/order/${mid}/buy"
 
         return try {
             val httpResponse =
