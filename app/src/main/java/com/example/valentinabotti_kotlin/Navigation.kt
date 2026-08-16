@@ -1,17 +1,15 @@
 package com.example.valentinabotti_kotlin
 
-import DettagliMenu
-import HomeListaMenu
+import com.example.valentinabotti_kotlin.ui.screens.DettagliMenu
+import com.example.valentinabotti_kotlin.ui.screens.HomeListaMenu
 import ProfiloUtente
 import Splash
-import StatoConsegna
+import com.example.valentinabotti_kotlin.ui.screens.StatoConsegna
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.valentinabotti_kotlin.model.Screen
-import com.example.valentinabotti_kotlin.model.UidSid
 
 @Composable
 fun Navigation(
@@ -43,8 +41,9 @@ fun Navigation(
         }
 
         composable(route = Screen.StatoConsegna.route) { backStackEntry ->
-            val oid = backStackEntry.arguments?.getString("oid")?.toIntOrNull() ?: 0
-            StatoConsegna(sid = sid, oid = oid, navController = navController)
+            val sidArg = backStackEntry.arguments?.getString("sid") ?: ""
+            val oidArg = backStackEntry.arguments?.getString("oid")?.toIntOrNull() ?: 0
+            StatoConsegna(sid = sidArg, oid = oidArg, navController = navController)
         }
     }
 }

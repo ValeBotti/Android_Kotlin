@@ -1,38 +1,14 @@
 package com.example.valentinabotti_kotlin.viewmodel
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavHostController
-import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore
 import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.getMid
 import com.example.valentinabotti_kotlin.data.remote.ApiCalls
 import com.example.valentinabotti_kotlin.model.ImageUI
-import com.example.valentinabotti_kotlin.model.Location
-import com.example.valentinabotti_kotlin.model.Menu
 import com.example.valentinabotti_kotlin.model.MenuDitails
-import com.example.valentinabotti_kotlin.model.ProfileDataString
-import com.example.valentinabotti_kotlin.model.Screen
-import com.example.valentinabotti_kotlin.model.UidSid
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DettagliMenuViewModel() : ViewModel() {
@@ -40,7 +16,7 @@ class DettagliMenuViewModel() : ViewModel() {
     suspend fun retriveMenuDitails(mid: Int?, sid: String, lat: Float, lng: Float): MenuDitails {
         return withContext(Dispatchers.IO) {
             try {
-                if (sid != null && mid != null) {
+                if (mid != null) {
                     val dettagliMenu = ApiCalls.getMenuDitails(mid = mid, sid = sid, lat = lat, lng = lng)
                     Log.d("DettagliMenuViewModel", "Image retrieved: $dettagliMenu")
                     dettagliMenu
@@ -69,14 +45,14 @@ class DettagliMenuViewModel() : ViewModel() {
                     deliveryTime = 0,
                     longDescription = "Descrizione lunga menu"
                 )
-            } as MenuDitails
+            }
         }
     }
 
     suspend fun retrieveImageMenu(mid: Int?, sid: String): ImageUI {
         return withContext(Dispatchers.IO) {
             try {
-                if (sid != null && mid != null) {
+                if (mid != null) {
                     val image = ApiCalls.getImageMenu(mid = mid, sid = sid)
                     Log.d("DettagliMenuViewModel", "Image retrieved: $image")
                     image
@@ -162,8 +138,8 @@ class DettagliMenuViewModel() : ViewModel() {
 
     fun formatDeliveryTime(deliveryTime: Int): String {
         Log.d("DettagliMenuViewModel", "Delivery time: $deliveryTime")
-        var hours = deliveryTime / 60
-        var minutes = deliveryTime % 60
+        val hours = deliveryTime / 60
+        val minutes = deliveryTime % 60
         return "$hours h $minutes min"
     }
 }

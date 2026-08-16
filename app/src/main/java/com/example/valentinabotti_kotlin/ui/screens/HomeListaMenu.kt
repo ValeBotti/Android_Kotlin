@@ -1,12 +1,10 @@
-
+package com.example.valentinabotti_kotlin.ui.screens
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,13 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,6 +26,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -41,20 +37,16 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
 import com.example.valentinabotti_kotlin.R
-import com.example.valentinabotti_kotlin.model.Location
 import com.example.valentinabotti_kotlin.model.Menu
 import com.example.valentinabotti_kotlin.model.Screen
 import com.example.valentinabotti_kotlin.ui.components.CustomButton
 import com.example.valentinabotti_kotlin.ui.components.MenuCard
-import com.example.valentinabotti_kotlin.ui.screens.Spinner
 import com.example.valentinabotti_kotlin.viewmodel.HomeListaMenuViewModel
 import com.example.valentinabotti_kotlin.viewmodel.LocationViewModel
-import com.example.valentinabotti_kotlin.viewmodel.MainActivityViewModel
 
 
 @Composable
 fun HomeListaMenu(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
     sid: String,
     uid: Int
@@ -74,35 +66,36 @@ fun HomeListaMenu(
     var menuList by remember { mutableStateOf<List<Menu>>(emptyList()) }
 
 
-    val locationViewModel : LocationViewModel = viewModel()
+    val locationViewModel: LocationViewModel = viewModel()
+
     val hasPermission by locationViewModel.hasPermission.observeAsState()
+    val currentLocation by locationViewModel.currentLocation.collectAsState()
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { isGranted -> locationViewModel.onPermissionResult(isGranted, context) }
-
-    val currentLocation by locationViewModel.currentLocation.collectAsState()
+    ) { isGranted ->
+        locationViewModel.onPermissionResult(isGranted)
+    }
 
     LaunchedEffect(hasPermission) {
-        if(hasPermission == false || hasPermission == null) {
-            locationViewModel.requestPermission(context, permissionLauncher)
-        } else {
-            locationViewModel.retrieveLocation(context)
+        when (hasPermission) {
+            null -> locationViewModel.requestPermission(permissionLauncher)
+            true -> locationViewModel.retrieveLocation(context)
+            false -> Log.d("HomeListaMenu", "Permission denied")
         }
     }
 
-    Log.d("HomeListaMenu", "Current location out: $currentLocation")
-
     LaunchedEffect(currentLocation) {
-        if (currentLocation != Location(0.0f, 0.0f)) {
+        if (currentLocation.lat != 0f && currentLocation.lng != 0f) {
             menuList = viewModelHomeListaMenu.retriveMenuList(
                 currentLocation.lat,
                 currentLocation.lng,
                 sid
             )
-            Log.d("HomeListaMenu", "Menu lista ${menuList}")
+            Log.d("HomeListaMenu", "Menu lista $menuList")
         }
     }
+
 
     if(menuList.size > 0) {
         LazyColumn(
@@ -116,44 +109,45 @@ fun HomeListaMenu(
                         text = "PERMESSI DI POSIZIONE NEGATI!",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
-                            .background(Color.White)
-                            .padding(8.dp),
+                            .padding(5.dp)
+                            .background(Color.White),
                         color = Color(0xFF4B0082)
                     )
                 }
 
             }
             item {
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp), // Padding a destra per spostare le icone
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     IconButton(
                         onClick = { navController.navigate(Screen.ProfiloUtente.route) },
-                        modifier = Modifier
-                            .size(50.dp)
+                        modifier = Modifier.size(35.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.user_circle),
                             contentDescription = "Profilo utente",
-                            tint = Color.Unspecified // Mantieni i colori originali dell'icona
+                            tint = Color.Unspecified
                         )
                     }
 
                     CustomButton(
                         text = "Mappa",
                         icon = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
-                        onClick = { navController.navigate(route = "statoConsegna/${sid}/${0}") },
+                        onClick = { navController.navigate("statoConsegna/${sid}/${0}") },
                         modifier = Modifier
-                            .padding(start= 150.dp)
                     )
                 }
             }
 
+
             items(menuList.size) { index ->
-                MenuCard(menuList[index], sid, uid, navController, viewModelHomeListaMenu)
+                MenuCard(menuList[index], sid, navController, viewModelHomeListaMenu)
             }
         }
     } else {

@@ -2,7 +2,6 @@ package com.example.valentinabotti_kotlin.ui.components
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -29,8 +27,6 @@ import com.example.valentinabotti_kotlin.data.local.DBController
 import com.example.valentinabotti_kotlin.data.local.Image
 import com.example.valentinabotti_kotlin.data.local.Word
 import com.example.valentinabotti_kotlin.model.ImageUI
-import com.example.valentinabotti_kotlin.model.UidSid
-import com.example.valentinabotti_kotlin.ui.theme.Pink40
 import com.example.valentinabotti_kotlin.ui.theme.Purple40
 import com.example.valentinabotti_kotlin.viewmodel.HomeListaMenuViewModel
 import androidx.compose.ui.graphics.Color
@@ -41,10 +37,9 @@ import com.example.valentinabotti_kotlin.ui.theme.DeeperPurple
 import com.example.valentinabotti_kotlin.ui.theme.Purple80
 
 @Composable
-fun MenuCard(menu: Menu, sid: String, uid: Int, navController: NavController, viewModel: HomeListaMenuViewModel) {
+fun MenuCard(menu: Menu, sid: String, navController: NavController, viewModel: HomeListaMenuViewModel) {
 
     var image by remember { mutableStateOf(ImageUI("")) }
-    var wordFromDB by remember { mutableStateOf("") }
 
     val context = LocalContext.current
 
@@ -54,7 +49,7 @@ fun MenuCard(menu: Menu, sid: String, uid: Int, navController: NavController, vi
             val base64 = db.imageDao().getBase64ByMid(menu.mid)
             val wordFromDB = db.wordDAO().getAllWord()
 
-            if (wordFromDB.isNullOrEmpty()) {
+            if (wordFromDB.isEmpty()) {
                 db.wordDAO().insertWord(Word(
                     name= menu.name
                 ))
@@ -77,7 +72,7 @@ fun MenuCard(menu: Menu, sid: String, uid: Int, navController: NavController, vi
                     Log.d("MenuCard", "Image retrieved from server: ${image.base64}")
 
 
-                    if (!image.base64.isNullOrEmpty()) {
+                    if (image.base64.isNotEmpty()) {
                         db.imageDao().insertImage(
                             Image(menu.mid, image.base64, menu.imageVersion)
                         )
@@ -98,7 +93,7 @@ fun MenuCard(menu: Menu, sid: String, uid: Int, navController: NavController, vi
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 15.dp)
+            .padding(horizontal = 5.dp)
             .padding(top=5.dp)
             .background(Purple40, shape = RoundedCornerShape(5))
     ) {
@@ -135,7 +130,7 @@ fun MenuCard(menu: Menu, sid: String, uid: Int, navController: NavController, vi
                 text = "Prezzo: ${String.format(menu.price.toString()).replace('.', ',')}€",
                 color = Color.White,
                 modifier = Modifier
-                    .padding(end = 100.dp),
+                    .padding(end = 80.dp),
                 fontSize = 12.sp // Imposta una dimensione del testo più piccola
             )
 

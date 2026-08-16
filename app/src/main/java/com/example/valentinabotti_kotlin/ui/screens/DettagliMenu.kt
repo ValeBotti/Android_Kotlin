@@ -1,6 +1,9 @@
+package com.example.valentinabotti_kotlin.ui.screens
+
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,15 +51,14 @@ import com.example.valentinabotti_kotlin.data.local.Image
 import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.getMid
 import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.getSid
 import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.saveMid
+import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.saveOid
 import com.example.valentinabotti_kotlin.model.ImageUI
 import com.example.valentinabotti_kotlin.model.MenuDitails
 import com.example.valentinabotti_kotlin.model.Screen
 import com.example.valentinabotti_kotlin.ui.components.Base64Image
 import com.example.valentinabotti_kotlin.ui.components.CustomButton
-import com.example.valentinabotti_kotlin.ui.screens.Spinner
 import com.example.valentinabotti_kotlin.ui.theme.DeepPurple
 import com.example.valentinabotti_kotlin.ui.theme.DeeperPurple
-import com.example.valentinabotti_kotlin.ui.theme.Purple80
 import com.example.valentinabotti_kotlin.ui.theme.PurpleGrey80
 import com.example.valentinabotti_kotlin.viewmodel.DettagliMenuViewModel
 import com.example.valentinabotti_kotlin.viewmodel.LocationViewModel
@@ -76,7 +78,7 @@ fun DettagliMenu(
 
     Log.d("DettagliMenu", "MID: $mid SID: $sid UID: $uid")
 
-    var context = LocalContext.current
+    val context = LocalContext.current
 
     val factoryLocation = viewModelFactory {
         initializer {
@@ -202,23 +204,58 @@ fun DettagliMenu(
 
     LaunchedEffect(buy) {
 
+        Log.d("DettagliMenu", "LaunchedEffect(buy) → triggered, buy = $buy")
+
         try {
             if (buy) {
+
+                Log.d("DettagliMenu", "Buy = true → starting purchase flow")
+
                 if (hasPermission == false) {
-                    Toast.makeText(context, "Non puoi acquistare senza aver dato i permessi di localizzazione", Toast.LENGTH_SHORT).show()
+                    Log.e("DettagliMenu", "Permission denied → cannot purchase")
+                    Toast.makeText(
+                        context,
+                        "Non puoi acquistare senza aver dato i permessi di localizzazione",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    var canPurchase = viewModelDettagli.purchaseMenuHandler(menuId, sid, uid, context, currentLocation.lat, currentLocation.lng)
+
+                    Log.d("DettagliMenu", "Permission OK → calling purchaseMenuHandler()")
+                    Log.d("DettagliMenu", "purchaseMenuHandler params: mid=$menuId, sid=$sid, uid=$uid, lat=${currentLocation.lat}, lng=${currentLocation.lng}")
+
+                    val canPurchase = viewModelDettagli.purchaseMenuHandler(
+                        menuId,
+                        sid,
+                        uid,
+                        context,
+                        currentLocation.lat,
+                        currentLocation.lng
+                    )
+
+                    Log.d("DettagliMenu", "purchaseMenuHandler result → oid = $canPurchase")
 
                     if (canPurchase != 0 && hasPermission == true) {
-                        Log.d("DettagliMenu", "oid: ${canPurchase}")
-                        navController.navigate(route = "statoConsegna/${sid}/${canPurchase}")
+                        Log.d("DettagliMenu", "Purchase SUCCESS → navigating to StatoConsegna")
+                        saveOid(context, canPurchase)
+                        navController.navigate("statoConsegna/$sid/$canPurchase")
+                    } else {
+
+                        Log.e("DettagliMenu", "Purchase FAILED → oid = $canPurchase")
+
+                        Toast.makeText(
+                            context,
+                            "Acquisto non riuscito. Verifica i dati utente, la carta o eventuali ordini in corso.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
+
                 }
             }
         } catch (e: Exception) {
             Log.e("DettagliMenu", "Error checking purchase: ${e.message}")
         }
     }
+
 
     if (menu == MenuDitails(
             mid = 0,
@@ -238,7 +275,7 @@ fun DettagliMenu(
                 .padding(
                     WindowInsets.systemBars.asPaddingValues()
                 )
-                .padding(horizontal = 16.dp), // Aggiunge padding orizzontale
+                .padding(horizontal = 10.dp), // Aggiunge padding orizzontale
         ) {
             item() {
                 Button(
@@ -260,7 +297,7 @@ fun DettagliMenu(
                 Text(
                     text = menu.name,
                     modifier = Modifier
-                        .padding(bottom = 8.dp),
+                        .padding(5.dp),
                     color = DeepPurple,
                     fontWeight = FontWeight.Bold
                 )
@@ -279,25 +316,26 @@ fun DettagliMenu(
                 }
                 Spacer(modifier = Modifier.height(20.dp))
             }
-            item() {
+            item {
                 Row(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .background(color = DeeperPurple, shape = RoundedCornerShape(25))
-                        .padding(horizontal = 4.dp),
+                        .padding(5.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     Text(
                         text = "Prezzo: ${String.format(menu.price.toString()).replace('.', ',')}€",
                         color = Color.White,
-                        modifier = Modifier
-                            .padding(end = 100.dp),
-                        fontSize = 12.sp // Imposta una dimensione del testo più piccola
+                        fontSize = 12.sp
                     )
 
                     Text(
                         text = "Tempo di consegna: ${viewModelDettagli.formatDeliveryTime(menu.deliveryTime)}",
                         color = Color.White,
-                        fontSize = 12.sp // Imposta una dimensione del testo più piccola
+                        fontSize = 12.sp
                     )
                 }
             }

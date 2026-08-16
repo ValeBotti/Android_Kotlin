@@ -1,6 +1,5 @@
 package com.example.valentinabotti_kotlin.viewmodel
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -10,17 +9,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore
 import com.example.valentinabotti_kotlin.data.remote.ApiCalls
-import com.example.valentinabotti_kotlin.model.ImageUI
 import com.example.valentinabotti_kotlin.model.Screen
 import com.example.valentinabotti_kotlin.model.UidSid
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.android.gms.location.Priority
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.tasks.await
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -34,7 +28,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                     val sid = PreferencesDataStore.getSid(context)
                     val uid = PreferencesDataStore.getUid(context)
 
-                    if (sid != null && uid != null) {
+                    if (!sid.isNullOrBlank() && uid != null && uid > 0) {
                         Log.d("MainActivity_ViewModel", "SID: $sid, UID: $uid")
                         UidSid(sid, uid)
                     } else {
@@ -99,30 +93,6 @@ fun retrieveCurrentPage(context: Context, onResult: (String?) -> Unit) {
         }
         withContext(Dispatchers.Main) {
             onResult(result)
-        }
-    }
-}
-
-//Funzione per recuperare la posizione dell'utente
-@SuppressLint("MissingPermission")
-fun retrieveuserLocation(context: Context, onResult: (String?) -> Unit) {
-    CoroutineScope(Dispatchers.IO).launch {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        val task = fusedLocationClient.getCurrentLocation(
-            Priority.PRIORITY_HIGH_ACCURACY,
-            CancellationTokenSource().token
-        )
-        try {
-            val location = task.await()
-            val result = "${location.latitude},${location.longitude}"
-            withContext(Dispatchers.Main) {
-                onResult(result)
-            }
-        } catch (e: Exception) {
-            Log.e("MainActivity", "Error getting location: ${e.message}")
-            withContext(Dispatchers.Main) {
-                onResult(null)
-            }
         }
     }
 }

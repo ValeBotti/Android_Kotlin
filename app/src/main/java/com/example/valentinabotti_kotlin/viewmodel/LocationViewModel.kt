@@ -1,8 +1,10 @@
 package com.example.valentinabotti_kotlin.viewmodel
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Looper
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 
@@ -11,59 +13,100 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.valentinabotti_kotlin.model.Location
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class LocationViewModel : ViewModel() {
 
-    private val _currentLocation = MutableStateFlow(Location(0f, 0f)) // Default location (Los Angeles)
+    private val _currentLocation = MutableStateFlow(Location(0f, 0f))
     val currentLocation: StateFlow<Location> = _currentLocation
 
-    private val _hasPermission = MutableLiveData(false)
-    val hasPermission: LiveData<Boolean> = _hasPermission
+    private val _hasPermission = MutableLiveData<Boolean?>(null)
+    val hasPermission: LiveData<Boolean?> = _hasPermission
 
-    // Funzione per controllare i permessi
+    fun onPermissionResult(isGranted: Boolean) {
+        Log.d("LocationVM", "onPermissionResult → $isGranted")
+        _hasPermission.value = isGranted
+    }
+
     fun checkLocalPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
+        val granted = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
+
+        Log.d("LocationVM", "checkLocalPermission → $granted")
+        return granted
     }
 
-    // Funzione per gestire la richiesta di permessi
-    fun requestPermission(context: Context, permissionLauncher: ActivityResultLauncher<String>) {
-        if (!checkLocalPermission(context)) {
-            permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-            permissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-        } else {
-            _hasPermission.value = true
-        }
+    fun requestPermission(permissionLauncher: ActivityResultLauncher<String>) {
+        Log.d("LocationVM", "requestPermission → launching permission request")
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    // Funzione per recuperare la posizione
     fun retrieveLocation(context: Context) {
-        Log.d("LocationViewModel", "Retrieving location")
-        if (checkLocalPermission(context)) {
-            retrieveuserLocation(context) { locationString ->
-                locationString?.let {
-                    val parts = it.split(",")
-                    _currentLocation.value = Location(parts[0].toFloat(), parts[1].toFloat())
-                }
-                Log.d("LocationViewModel", "Location: $locationString")
-                _hasPermission.value = true
+        Log.d("LocationVM", "retrieveLocation → START")
+
+        if (!checkLocalPermission(context)) {
+            Log.d("LocationVM", "retrieveLocation → NO PERMISSION")
+            return
+        }
+
+        retrieveuserLocation(context) { locationString ->
+            Log.d("LocationVM", "retrieveLocation → callback = $locationString")
+
+            if (locationString != null) {
+                val parts = locationString.split(",")
+                val lat = parts[0].toFloat()
+                val lng = parts[1].toFloat()
+
+                _currentLocation.value = Location(lat, lng)
+                Log.d("LocationVM", "currentLocation UPDATED → ${_currentLocation.value}")
+            } else {
+                Log.e("LocationVM", "retrieveLocation → NULL from callback")
             }
-        } else {
-            _currentLocation.value = Location(34f, -118f)
         }
     }
 
-    // Funzione per gestire il risultato della richiesta di permesso
-    fun onPermissionResult(isGranted: Boolean, context: Context) {
-        _hasPermission.value = isGranted
-        if (isGranted) {
-            retrieveLocation(context)
-        } else {
-            _currentLocation.value = Location(34f, -118f)
-        }
+
+    @SuppressLint("MissingPermission")
+    fun retrieveuserLocation(context: Context, onResult: (String?) -> Unit) {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+        Log.d("LocationVM", "retrieveuserLocation → requesting single update")
+
+        val request = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            1500 // 1.5 secondi
+        ).setMaxUpdates(1).build()
+
+        fusedLocationClient.requestLocationUpdates(
+            request,
+            object : LocationCallback() {
+                override fun onLocationResult(result: LocationResult) {
+                    val loc = result.lastLocation
+                    Log.d("LocationVM", "onLocationResult → $loc")
+
+                    if (loc != null) {
+                        val lat = loc.latitude
+                        val lng = loc.longitude
+                        Log.d("LocationVM", "NEW LOCATION → $lat,$lng")
+                        onResult("$lat,$lng")
+                    } else {
+                        Log.e("LocationVM", "onLocationResult → NULL LOCATION")
+                        onResult(null)
+                    }
+
+                    fusedLocationClient.removeLocationUpdates(this)
+                    Log.d("LocationVM", "Location updates REMOVED")
+                }
+            },
+            Looper.getMainLooper()
+        )
     }
 }

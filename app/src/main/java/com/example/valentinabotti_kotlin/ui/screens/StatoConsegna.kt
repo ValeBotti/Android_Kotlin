@@ -1,3 +1,5 @@
+package com.example.valentinabotti_kotlin.ui.screens
+
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
-import kotlinx.coroutines.delay
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,7 +42,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.getOid
 import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.getSid
-import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.saveOid
 import com.example.valentinabotti_kotlin.model.Location
 import com.example.valentinabotti_kotlin.model.MenuDitails
 import com.example.valentinabotti_kotlin.model.Order_COMPLETED
@@ -49,9 +49,12 @@ import com.example.valentinabotti_kotlin.model.Order_ON_DELIVERY
 import com.example.valentinabotti_kotlin.model.Screen
 import com.example.valentinabotti_kotlin.viewmodel.LocationViewModel
 import com.example.valentinabotti_kotlin.viewmodel.StatoConsegnaViewModel
+import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
 import com.mapbox.maps.extension.compose.annotation.rememberIconImage
+import com.mapbox.maps.plugin.animation.MapAnimationOptions
+import lilac
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.Int
@@ -60,8 +63,7 @@ import kotlin.Int
 fun StatoConsegna(
     sid: String,
     oid: Int,
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController
 ) {
 
     val context = LocalContext.current
@@ -131,73 +133,79 @@ fun StatoConsegna(
     var oidState by remember { mutableStateOf(oid) }
 
     LaunchedEffect(Unit) {
+        Log.d("StatoConsegna", "LaunchedEffect(Unit) → START retrieveLocation()")
         locationViewModel.retrieveLocation(context)
+    }
 
-        if (oid != 0) {
-            saveOid(context, oid)
+    LaunchedEffect(currentLocation) {
 
-            Log.d("statoConsegna", "oid DettagliMenu: $oid")
-            Log.d("statoConsegna", "sid DettagliMenu: $sid")
+        Log.d("StatoConsegna", "LaunchedEffect(currentLocation) → triggered")
+        Log.d("StatoConsegna", "currentLocation = ${currentLocation.lat}, ${currentLocation.lng}")
 
-            var orderFetched = viewModel.fetchOrder(oid, sid)
+        if (currentLocation.lat != 0f && currentLocation.lng != 0f) {
+
+            Log.d("StatoConsegna", "Location VALID → proceeding")
+
+            val oidCurrent = getOid(context) ?: oid
+            val sidCurrent = getSid(context) ?: sid
+
+            Log.d("StatoConsegna", "oidCurrent = $oidCurrent")
+            Log.d("StatoConsegna", "sidCurrent = $sidCurrent")
+
+            Log.d("StatoConsegna", "Calling fetchOrder(oid=$oidCurrent, sid=$sidCurrent)")
+            val orderFetched = viewModel.fetchOrder(oidCurrent, sidCurrent)
+
+            Log.d("StatoConsegna", "orderFetched = $orderFetched")
 
             when (orderFetched) {
                 is Order_ON_DELIVERY -> {
-                    while (orderFetched is Order_ON_DELIVERY) {
-                        deliveryData_ON_DELIVERY = orderFetched
-                        orderFetched = viewModel.fetchOrder(oid, sid)
-                        if (orderFetched is Order_COMPLETED) {
-                            deliveryData_COMPLETED = orderFetched
-                            Log.d("statoConsegna_Completed", "${deliveryData_COMPLETED}")
-                        }
-                        Log.d("statoConsegna_On_delivery", "${orderFetched}")
-                        delay(10_000) // Wait for 10 seconds
-                    }
+                    Log.d("StatoConsegna", "Order_ON_DELIVERY received")
+                    deliveryData_ON_DELIVERY = orderFetched
+                    Log.d("StatoConsegna", "deliveryData_ON_DELIVERY = $deliveryData_ON_DELIVERY")
                 }
                 is Order_COMPLETED -> {
-                    Log.d("statoConsegna_Completed", "${orderFetched}")
+                    Log.d("StatoConsegna", "Order_COMPLETED received")
                     deliveryData_COMPLETED = orderFetched
+                    Log.d("StatoConsegna", "deliveryData_COMPLETED = $deliveryData_COMPLETED")
                 }
             }
 
+            // Ora puoi fare retriveMenuDitails
+            if (deliveryData_ON_DELIVERY.mid != 0) {
+
+                Log.d("StatoConsegna", "Fetching menu for ON_DELIVERY → mid=${deliveryData_ON_DELIVERY.mid}")
+
+                menu = viewModel.retriveMenuDitails(
+                    deliveryData_ON_DELIVERY.mid,
+                    sidCurrent,
+                    currentLocation.lat,
+                    currentLocation.lng
+                )
+
+                Log.d("StatoConsegna", "menu updated (ON_DELIVERY) → $menu")
+
+            } else if (deliveryData_COMPLETED.mid != 0) {
+
+                Log.d("StatoConsegna", "Fetching menu for COMPLETED → mid=${deliveryData_COMPLETED.mid}")
+
+                menu = viewModel.retriveMenuDitails(
+                    deliveryData_COMPLETED.mid,
+                    sidCurrent,
+                    currentLocation.lat,
+                    currentLocation.lng
+                )
+
+                Log.d("StatoConsegna", "menu updated (COMPLETED) → $menu")
+
+            } else {
+                Log.e("StatoConsegna", "NO VALID MID FOUND → menu not fetched")
+            }
         } else {
-
-            Log.d("statoConsegna", "oid HomePage: $oid")
-            Log.d("statoConsegna", "sid HomePage: $sid")
-
-            val oidCurrent = getOid(context) ?: 0
-            val sidCurrent = getSid(context) ?: ""
-
-            oidState = oidCurrent
-            sidState = sidCurrent
-
-            Log.d("statoConsegna", "oidCurrent: $oidCurrent")
-            Log.d("statoConsegna", "sidCurrent: $sidCurrent")
-
-            var orderFetched = viewModel.fetchOrder(oidState, sidState)
-
-            when (orderFetched) {
-                is Order_ON_DELIVERY -> {
-                    while (orderFetched is Order_ON_DELIVERY) {
-                        deliveryData_ON_DELIVERY = orderFetched
-                        orderFetched = viewModel.fetchOrder(oidState, sidState)
-                        if (orderFetched is Order_COMPLETED) {
-                            deliveryData_COMPLETED = orderFetched
-                            Log.d("statoConsegna_Completed", "${deliveryData_COMPLETED}")
-                        }
-                        Log.d("statoConsegna_On_delivery", "${orderFetched}")
-                        delay(10_000) // Wait for 10 seconds
-                    }
-                }
-                is Order_COMPLETED -> {
-                    Log.d("statoConsegna_Completed", "${orderFetched}")
-                    deliveryData_COMPLETED = orderFetched
-                }
-            }
+            Log.d("StatoConsegna", "Location INVALID → waiting…")
         }
     }
 
-    LaunchedEffect(currentLocation, deliveryData_COMPLETED.status) {
+    LaunchedEffect(currentLocation, oidState) {
 
         Log.d("StatoConsegna", "Current location: ${currentLocation.lat}, ${currentLocation.lng}")
         if (deliveryData_ON_DELIVERY.mid != 0) {
@@ -439,30 +447,43 @@ fun StatoConsegna(
             }
         }
         else -> {
+
             ElevatedButton(
-                onClick = { navController.navigate(Screen.HomeListaMenu.route) }, // Usa il callback per cambiare pagina
-                modifier = Modifier
-                    .padding(WindowInsets.systemBars.asPaddingValues()), // Rispetta i margini del notch
+                onClick = { navController.navigate(Screen.HomeListaMenu.route) },
+                modifier = Modifier.padding(WindowInsets.systemBars.asPaddingValues()),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.Black,
                     containerColor = Color.White
                 )
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack, // Usa l'icona di una freccia a sinistra
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Home lista menu"
                 )
                 Text(text = "Back")
             }
+
             val mapViewportState = rememberMapViewportState {
                 setCameraOptions {
-                    center(
-                        Point.fromLngLat(
-                            deliveryData_COMPLETED.currentPosition.lng.toDouble(),
-                            deliveryData_COMPLETED.currentPosition.lat.toDouble()
-                        )
-                    )
+                    center(Point.fromLngLat(9.683772, 45.05629))
                     zoom(14.0)
+                }
+            }
+
+            LaunchedEffect(currentLocation) {
+                if (currentLocation.lat != 0f && currentLocation.lng != 0f) {
+                    mapViewportState.flyTo(
+                        cameraOptions = CameraOptions.Builder()
+                            .center(Point.fromLngLat(
+                                currentLocation.lng.toDouble(),
+                                currentLocation.lat.toDouble()
+                            ))
+                            .zoom(14.0)
+                            .build(),
+                        animationOptions = MapAnimationOptions.mapAnimationOptions {
+                            duration(1500)
+                        }
+                    )
                 }
             }
 
@@ -470,34 +491,33 @@ fun StatoConsegna(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 50.dp)
-                    .padding(WindowInsets.systemBars.asPaddingValues()), // Rispetta il notch
+                    .padding(WindowInsets.systemBars.asPaddingValues()),
                 mapViewportState = mapViewportState
             ) {
+
                 MapEffect(Unit) { mapView ->
                     mapView.location.updateSettings {
                         enabled = false
                     }
                 }
 
-                val drone = rememberIconImage(
+                val droneIcon = rememberIconImage(
                     key = R.drawable.drone,
                     painter = painterResource(R.drawable.drone),
                 )
 
-                Log.d(
-                    "MarkerPosition",
-                    "Lat: ${deliveryData_COMPLETED.currentPosition.lat}, Lng: ${deliveryData_COMPLETED.currentPosition.lng}"
-                )
-                Log.d("MarkerIcon", "Icon Loaded: ${R.drawable.drone}")
-                PointAnnotation(
-                    point = Point.fromLngLat(
-                        deliveryData_COMPLETED.currentPosition.lng.toDouble(),
-                        deliveryData_COMPLETED.currentPosition.lat.toDouble()
-                    )
-                ) {
-                    iconImage = drone
+                if (currentLocation.lat != 0f && currentLocation.lng != 0f) {
+                    PointAnnotation(
+                        point = Point.fromLngLat(
+                            currentLocation.lng.toDouble(),
+                            currentLocation.lat.toDouble()
+                        )
+                    ) {
+                        iconImage = droneIcon
+                    }
                 }
             }
         }
+
     }
 }

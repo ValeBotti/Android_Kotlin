@@ -16,10 +16,11 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import io.ktor.http.HttpStatusCode
-import kotlinx.serialization.encodeToString
+import androidx.core.net.toUri
 
 object CommunicationController {
-    val BASE_URL = "http://10.0.2.2:5077/api"//localhost
+    //val BASE_URL = "http://10.0.2.2:5077/api"//localhost
+    val BASE_URL = "http://192.168.1.12:5077/api" //Retrofit uses port 80 by default
     var sid: String? = null
     private val TAG = CommunicationController::class.simpleName
 
@@ -43,7 +44,7 @@ object CommunicationController {
         queryParameters: Map<String, Any> = emptyMap(),
         requestBody: Any? = null
     ): HttpResponse {
-        val urlUri = Uri.parse(url)
+        val urlUri = url.toUri()
         val urlBuilder = urlUri.buildUpon()
         queryParameters.forEach { (key, value) ->
             urlBuilder.appendQueryParameter(key, value.toString())
