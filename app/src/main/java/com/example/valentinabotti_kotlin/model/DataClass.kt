@@ -123,6 +123,3 @@ data class BodyOrder(
     val deliveryLocation: Location,
     val cardNumber: String?
 )
-
-@Serializable
-data class ResponseError(val message: String)//per inviare messaggi di errore restituiti dal server
