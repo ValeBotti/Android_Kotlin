@@ -1,8 +1,8 @@
 A mobile application written in Kotlin, using Android Studio.
 
-Here I handled different problems:
+This project presented me with a few challenges, such as:
 
-- connecting with the API using Retrofit
+- connecting to the API using Retrofit
 - connecting the web app with the emulator and the physical device
 - handling the lifecycle
 - using ViewModel (MVVM architectural pattern)
