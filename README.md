@@ -1,6 +1,6 @@
 # KOTLIN ANDROID MOBILE APP -> FOOD DELIVERY PLATFORM
 
-## Framework: Jetpack Compose, IDE: Android Studio
+### Framework: Jetpack Compose, IDE: Android Studio
 
 A mobile application written in Kotlin using Android Studio and Jetpack Compose, designed as the frontend of a complete food‑delivery platform.
 
