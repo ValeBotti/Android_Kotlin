@@ -6,4 +6,4 @@ Here I handled different problems:
 - using ViewModel (MVVM architectural pattern)
 - handling location
 
-[Project demo video](https://1drv.ms/v/c/e3188549c7d8abfc/IQACn6kfk1eBQrftX17PQIl8AdI6yRexpLrl0PydAkfuqlk?e=Nv8gLz)
+[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQBei9-F1AD5Qph_f5faK733AecOH8uAjvyG88z45eNunNk?e=XN8hr3)
