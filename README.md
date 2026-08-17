@@ -7,7 +7,7 @@ A mobile application written in Kotlin using Android Studio and Jetpack Compose,
 This project presented me with a few challenges, such as:
 
 - Retrofit integration for API communication
-- Connecting emulator and physical device to the backend
+- Connecting an emulator or a physical device
 - Lifecycle management in a modern Compose environment
 - MVVM architecture using ViewModel and state‑driven UI
 - Location handling and permissions
@@ -27,7 +27,7 @@ This project presented me with a few challenges, such as:
 2. ViewModel Layer — MVVM
 -  StateFlow / MutableState
 -  Event handling
--  Buisiness logic
+-  Business logic
 
 4. Data Layer
 - Room Database
@@ -38,9 +38,9 @@ This project presented me with a few challenges, such as:
 - OkHttp (client, logging)
 
 6. Location & Mapbox Integration
-- Requiest permission
+- Request permission
 - Mapbox map rendering + dynamic markers
 
-7. LifeCylce
+7. Lifecycle
 - Compose lifecycle
 - Handling app closure, background, resume
