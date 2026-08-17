@@ -10,7 +10,6 @@
       android:translateX="15"
       android:translateY="15">
 
-    <!-- Cerchio di sfondo -->
     <path
         android:pathData="M50,5a45,45 0,1 1,-45,45a45,45 0,1 1,45,-45"
         android:fillColor="#5F0061" />

@@ -277,7 +277,7 @@ object ApiCalls {
         }
     }
 
-    suspend fun postMenu(mid: Int, sid: String, lat: Float, lng: Float): Order_ON_DELIVERY {
+    suspend fun postMenu(mid: Int, sid: String, cardNumber: String?, lat: Float, lng: Float): Order_ON_DELIVERY {
         Log.d(TAG, "postMenu")
         Log.d("postMenu", "MID: $mid SID: $sid LAT: $lat LNG: $lng")
 
@@ -288,7 +288,7 @@ object ApiCalls {
                 CommunicationController.genericRequest(
                     url,
                     CommunicationController.HttpMethod.POST,
-                    requestBody = BodyOrder( sid = sid, deliveryLocation = Location(lat, lng) )
+                    requestBody = BodyOrder( sid = sid, cardNumber = cardNumber, deliveryLocation = Location(lat, lng) )
                 )
 
             Log.d("postMenu", "Response: ${httpResponse}")
@@ -308,6 +308,19 @@ object ApiCalls {
                     uid = 0,
                     creationTimestamp = "",
                     status = "INVALID_CARD",
+                    deliveryLocation = Location(0f, 0f),
+                    expectedDeliveryTimestamp = "",
+                    currentPosition = Location(0f, 0f)
+                )// Risultato di fallback
+            } else if (httpResponse.status.value == 409) {
+                Log.e(TAG, "Request failed. HTTP Status 409: ${httpResponse.status.value}")
+
+                Order_ON_DELIVERY(
+                    oid = 0,
+                    mid = 0,
+                    uid = 0,
+                    creationTimestamp = "",
+                    status = "ORDER_ALREADY_ON_DELIVERY",
                     deliveryLocation = Location(0f, 0f),
                     expectedDeliveryTimestamp = "",
                     currentPosition = Location(0f, 0f)

@@ -84,6 +84,7 @@ class DettagliMenuViewModel() : ViewModel() {
             try {
                 // Recupera i dati utente
                 val userData = ApiCalls.getRetriveUser(sid, uid)
+
                 Log.d("DettagliMenuViewModel", "${userData}")
                 if (userData.firstName == "Nome" || userData.firstName == null) {
                     Log.d("DettagliMenuViewModel", "User data not compiled")
@@ -93,17 +94,9 @@ class DettagliMenuViewModel() : ViewModel() {
                     return@withContext 0 // Dati utente non compilati, acquisto non possibile
                 }
 
-                if (userData.orderStatus == "ON_DELIVERY") {
-                    Log.d("DettagliMenuViewModel", "Order in progress")
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Hai già un ordine in corso", Toast.LENGTH_SHORT).show()
-                    }
-                    return@withContext 0 // Ordine in corso, acquisto non possibile
-                }
-
                 // Effettua l'acquisto del menu
                 try {
-                    val orderData = ApiCalls.postMenu(mid, sid, lat, lng)
+                    val orderData = ApiCalls.postMenu(mid, sid, userData.cardNumber, lat, lng)
                     when (orderData.status) {
                         "INVALID_CARD" -> {
                             Log.d("DettagliMenuViewModel", "Invalid card")
@@ -116,9 +109,24 @@ class DettagliMenuViewModel() : ViewModel() {
                             }
                             return@withContext 0
                         }
+                        "ORDER_ALREADY_ON_DELIVERY" -> {
+                            Log.d("DettagliMenuViewModel", "Order already on delivery")
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    context,
+                                    "Hai già effettuato un ordine!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            return@withContext 0
+                        }
                         "ERROR" -> {
                             Log.d("DettagliMenuViewModel", "Server error")
                             return@withContext 0
+                        }
+                        "NULL" -> {
+                            Log.d("DettagliMenuViewModel", "Unknown error")
+                            return@withContext orderData.oid
                         }
                         else -> {
                             Log.d("DettagliMenuViewModel", "Menu purchased successfully")

@@ -1,8 +1,6 @@
 package com.example.valentinabotti_kotlin.model
 
 import kotlinx.serialization.Serializable//pacchetto kotlin per la serializzazione e deserializzazione di dati
-import java.time.LocalDateTime
-import kotlin.io.encoding.Base64
 
 @Serializable
 data class UidSid(
@@ -122,7 +120,8 @@ data class Location(
 @Serializable
 data class BodyOrder(
     val sid: String,
-    val deliveryLocation: Location
+    val deliveryLocation: Location,
+    val cardNumber: String?
 )
 
 @Serializable

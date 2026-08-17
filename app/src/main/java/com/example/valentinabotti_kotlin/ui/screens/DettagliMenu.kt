@@ -234,21 +234,11 @@ fun DettagliMenu(
 
                     Log.d("DettagliMenu", "purchaseMenuHandler result → oid = $canPurchase")
 
-                    if (canPurchase != 0 && hasPermission == true) {
+                    if (canPurchase != 0) {
                         Log.d("DettagliMenu", "Purchase SUCCESS → navigating to StatoConsegna")
                         saveOid(context, canPurchase)
                         navController.navigate("statoConsegna/$sid/$canPurchase")
-                    } else {
-
-                        Log.e("DettagliMenu", "Purchase FAILED → oid = $canPurchase")
-
-                        Toast.makeText(
-                            context,
-                            "Acquisto non riuscito. Verifica i dati utente, la carta o eventuali ordini in corso.",
-                            Toast.LENGTH_LONG
-                        ).show()
                     }
-
                 }
             }
         } catch (e: Exception) {
