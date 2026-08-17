@@ -213,7 +213,7 @@ class ProfiloUtenteViewModel() : ViewModel() {
         return withContext(Dispatchers.IO) {
             try {
                 if (sid != null && mid != null) {
-                    val dettagliMenu = ApiCalls.getMenuDitails(mid = mid, sid = sid, lat = lat, lng = lng)
+                    val dettagliMenu = ApiCalls.getMenuDitails(mid = mid)
                     Log.d("DettagliMenuViewModel", "Image retrieved: $dettagliMenu")
                     dettagliMenu
                 } else {

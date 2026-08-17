@@ -9,6 +9,7 @@ import com.example.valentinabotti_kotlin.model.Menu
 import com.example.valentinabotti_kotlin.model.MenuDitails
 import com.example.valentinabotti_kotlin.model.Order
 import com.example.valentinabotti_kotlin.model.Order_COMPLETED
+import com.example.valentinabotti_kotlin.model.Order_NULL
 import com.example.valentinabotti_kotlin.model.Order_ON_DELIVERY
 import com.example.valentinabotti_kotlin.model.ProfileData
 import com.example.valentinabotti_kotlin.model.ProfileDataModifiedByUser
@@ -227,17 +228,16 @@ object ApiCalls {
         }
     }
 
-    suspend fun getMenuDitails(mid: Int, sid: String, lat: Float, lng: Float): MenuDitails {
+    suspend fun getMenuDitails(mid: Int): MenuDitails {
         Log.d(TAG, "getMenuDitails")
-        Log.d("getMenuDitails", "MID: $mid SID: $sid LAT: $lat LNG: $lng")
+        Log.d("getMenuDitails", "MID: $mid")
 
         val url = "${CommunicationController.BASE_URL}/menu/$mid"
 
         return try {
             val httpResponse = CommunicationController.genericRequest(
                 url,
-                CommunicationController.HttpMethod.GET,
-                queryParameters = mapOf("mid" to mid, "lat" to lat, "lng" to lng, "sid" to sid)
+                CommunicationController.HttpMethod.GET
             )
 
             // Controllo se la risposta è andata a buon fine
@@ -255,7 +255,7 @@ object ApiCalls {
                     mid = mid,
                     name = "Nome menu",
                     price = 0.0,
-                    location = mapOf("lat" to lat, "lng" to lng),
+                    location = mapOf("lat" to 0f, "lng" to 0f),
                     imageVersion = 0,
                     shortDescription = "Descrizione menu",
                     deliveryTime = 0,
@@ -268,7 +268,7 @@ object ApiCalls {
                 mid = mid,
                 name = "Nome menu",
                 price = 0.0,
-                location = mapOf("lat" to lat, "lng" to lng),
+                location = mapOf("lat" to 0f, "lng" to 0f),
                 imageVersion = 0,
                 shortDescription = "Descrizione menu",
                 deliveryTime = 0,
@@ -355,8 +355,7 @@ object ApiCalls {
     }
 
     suspend fun getOrder(oid: Int, sid: String): Order {
-        Log.d(TAG, "getOrder ${oid}")
-
+        Log.d(TAG, "getOrder $oid")
 
         val url = "${CommunicationController.BASE_URL}/order/$oid"
 
@@ -367,49 +366,47 @@ object ApiCalls {
                 queryParameters = mapOf("sid" to sid)
             )
 
-            // Controllo se la risposta è andata a buon fine
-            if (httpResponse.status.value == 200) {
-                val jsonString = httpResponse.bodyAsText()
-                Log.d(TAG, "Raw JSON: $jsonString")
+            val statusCode = httpResponse.status.value
+            val jsonString = httpResponse.bodyAsText()
 
-                val json = Json { ignoreUnknownKeys = true }
+            Log.d(TAG, "HTTP $statusCode")
+            Log.d(TAG, "Raw JSON: $jsonString")
 
-                // Deserializzazione diretta di un singolo oggetto
-                val jsonObject = json.parseToJsonElement(jsonString).jsonObject
-                val order = when {
-                    "deliveryTimestamp" in jsonObject.keys -> Json.decodeFromJsonElement<Order_COMPLETED>(jsonObject)
-                    "expectedDeliveryTimestamp" in jsonObject.keys -> Json.decodeFromJsonElement<Order_ON_DELIVERY>(jsonObject)
-                    else -> Json.decodeFromJsonElement<Order>(jsonObject)
+            if (statusCode != 200 || jsonString.isBlank()) {
+                Log.e(TAG, "Invalid response → returning NULL order")
+                return Order_NULL()
+            }
+
+            val json = Json { ignoreUnknownKeys = true }
+            val jsonObject = json.parseToJsonElement(jsonString).jsonObject
+
+            val jsonElement = json.parseToJsonElement(jsonString)
+
+            Log.d(TAG, "JSON OBJECT (pretty): ${jsonElement}")
+
+            return when {
+
+                jsonObject.containsKey("deliveryTimestamp") -> {
+                    Log.d(TAG, "Detected COMPLETED → deliveryTimestamp key FOUND")
+                    Log.d(TAG, "Decoding as Order_COMPLETED")
+                    Json.decodeFromJsonElement<Order_COMPLETED>(jsonObject)
                 }
 
-                return order
+                jsonObject.containsKey("expectedDeliveryTimestamp") -> {
+                    Log.d(TAG, "Detected ON_DELIVERY → expectedDeliveryTimestamp key FOUND")
+                    Log.d(TAG, "Decoding as Order_ON_DELIVERY")
+                    Json.decodeFromJsonElement<Order_ON_DELIVERY>(jsonObject)
+                }
 
-            } else {
-                // Se lo status non è 200, ritorniamo un valore di fallback
-                Log.e(TAG, "Request failed. HTTP Status: ${httpResponse.status.value}")
-                Order_COMPLETED(
-                    oid = 0,
-                    mid = 0,
-                    uid = 0,
-                    creationTimestamp = "",
-                    status = "NULL",
-                    deliveryLocation = Location(0f, 0f),
-                    currentPosition = Location(0f, 0f),
-                    deliveryTimestamp = ""
-                )
+                else -> {
+                    Log.w(TAG, "No timestamp keys found → decoding as generic Order")
+                    Json.decodeFromJsonElement<Order>(jsonObject)
+                }
             }
         } catch (e: Exception) {
             Log.e(TAG, "Request error: ${e.message}")
-            Order_COMPLETED(
-                oid = 0,
-                mid = 0,
-                uid = 0,
-                creationTimestamp = "",
-                status = "NULL",
-                deliveryLocation = Location(0f, 0f),
-                currentPosition = Location(0f, 0f),
-                deliveryTimestamp = ""
-            )
+            return Order_NULL()
         }
     }
+
 }

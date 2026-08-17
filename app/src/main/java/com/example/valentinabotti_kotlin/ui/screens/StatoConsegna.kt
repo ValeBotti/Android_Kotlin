@@ -54,7 +54,9 @@ import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportS
 import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
 import com.mapbox.maps.extension.compose.annotation.rememberIconImage
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
+import kotlinx.coroutines.delay
 import lilac
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.Int
@@ -139,86 +141,70 @@ fun StatoConsegna(
 
     LaunchedEffect(currentLocation) {
 
-        Log.d("StatoConsegna", "LaunchedEffect(currentLocation) → triggered")
-        Log.d("StatoConsegna", "currentLocation = ${currentLocation.lat}, ${currentLocation.lng}")
+        Log.d("StatoConsegna", "Polling started → currentLocation = ${currentLocation.lat}, ${currentLocation.lng}")
 
-        if (currentLocation.lat != 0f && currentLocation.lng != 0f) {
+        if (currentLocation.lat == 0f || currentLocation.lng == 0f) {
+            Log.d("StatoConsegna", "Location INVALID → polling aborted")
+            return@LaunchedEffect
+        }
 
-            Log.d("StatoConsegna", "Location VALID → proceeding")
+        val oidCurrent = getOid(context) ?: oid
+        val sidCurrent = getSid(context) ?: sid
 
-            val oidCurrent = getOid(context) ?: oid
-            val sidCurrent = getSid(context) ?: sid
+        while (true) {
 
-            Log.d("StatoConsegna", "oidCurrent = $oidCurrent")
-            Log.d("StatoConsegna", "sidCurrent = $sidCurrent")
+            Log.d("StatoConsegna", "Polling → fetchOrder(oid=$oidCurrent, sid=$sidCurrent)")
 
-            Log.d("StatoConsegna", "Calling fetchOrder(oid=$oidCurrent, sid=$sidCurrent)")
             val orderFetched = viewModel.fetchOrder(oidCurrent, sidCurrent)
 
-            Log.d("StatoConsegna", "orderFetched = $orderFetched")
-
             when (orderFetched) {
+
                 is Order_ON_DELIVERY -> {
-                    Log.d("StatoConsegna", "Order_ON_DELIVERY received")
                     deliveryData_ON_DELIVERY = orderFetched
-                    Log.d("StatoConsegna", "deliveryData_ON_DELIVERY = $deliveryData_ON_DELIVERY")
+                    Log.d("StatoConsegna", "Order_ON_DELIVERY updated → $deliveryData_ON_DELIVERY")
+                    menu = viewModel.retriveMenuDitails(deliveryData_ON_DELIVERY.mid, sidState, currentLocation.lat, currentLocation.lng)
                 }
+
                 is Order_COMPLETED -> {
-                    Log.d("StatoConsegna", "Order_COMPLETED received")
                     deliveryData_COMPLETED = orderFetched
-                    Log.d("StatoConsegna", "deliveryData_COMPLETED = $deliveryData_COMPLETED")
+                    Log.d("StatoConsegna", "Order_COMPLETED updated → $deliveryData_COMPLETED")
+                    menu = viewModel.retriveMenuDitails(deliveryData_COMPLETED.mid, sidState, currentLocation.lat, currentLocation.lng)
+
+                    break
+                }
+
+                else -> {
+                    Log.e("StatoConsegna", "Order fetch error → $orderFetched")
                 }
             }
 
-            // Ora puoi fare retriveMenuDitails
-            if (deliveryData_ON_DELIVERY.mid != 0) {
+            val midToFetch =
+                if (deliveryData_ON_DELIVERY.mid != 0) deliveryData_ON_DELIVERY.mid
+                else deliveryData_COMPLETED.mid
 
-                Log.d("StatoConsegna", "Fetching menu for ON_DELIVERY → mid=${deliveryData_ON_DELIVERY.mid}")
+            if (midToFetch != 0) {
+                Log.d("StatoConsegna", "Fetching menu → mid=$midToFetch")
 
                 menu = viewModel.retriveMenuDitails(
-                    deliveryData_ON_DELIVERY.mid,
+                    midToFetch,
                     sidCurrent,
                     currentLocation.lat,
                     currentLocation.lng
                 )
 
-                Log.d("StatoConsegna", "menu updated (ON_DELIVERY) → $menu")
-
-            } else if (deliveryData_COMPLETED.mid != 0) {
-
-                Log.d("StatoConsegna", "Fetching menu for COMPLETED → mid=${deliveryData_COMPLETED.mid}")
-
-                menu = viewModel.retriveMenuDitails(
-                    deliveryData_COMPLETED.mid,
-                    sidCurrent,
-                    currentLocation.lat,
-                    currentLocation.lng
-                )
-
-                Log.d("StatoConsegna", "menu updated (COMPLETED) → $menu")
-
+                Log.d("StatoConsegna", "Menu updated → $menu")
             } else {
                 Log.e("StatoConsegna", "NO VALID MID FOUND → menu not fetched")
             }
-        } else {
-            Log.d("StatoConsegna", "Location INVALID → waiting…")
-        }
-    }
 
-    LaunchedEffect(currentLocation, oidState) {
-
-        Log.d("StatoConsegna", "Current location: ${currentLocation.lat}, ${currentLocation.lng}")
-        if (deliveryData_ON_DELIVERY.mid != 0) {
-            menu = viewModel.retriveMenuDitails(deliveryData_ON_DELIVERY.mid, sidState, currentLocation.lat, currentLocation.lng)
-            Log.d("StatoConsegna", "Menu details: $menu")
-        } else if (deliveryData_COMPLETED.mid != 0) {
-            menu = viewModel.retriveMenuDitails(deliveryData_COMPLETED.mid, sidState, currentLocation.lat, currentLocation.lng)
-            Log.d("StatoConsegna", "Menu details: $menu")
+            delay(3000)
         }
+
+        Log.d("StatoConsegna", "Polling terminated")
     }
 
     when {
-        deliveryData_ON_DELIVERY.status.equals("ON_DELIVERY") && !deliveryData_COMPLETED.status.equals("COMPLETED") && menu.mid != 0 -> {
+        deliveryData_ON_DELIVERY.status.equals("ON_DELIVERY") && menu.mid != 0 -> {
             Column (
                 modifier = Modifier
                     .padding(WindowInsets.systemBars.asPaddingValues()), // Rispetta i margini del notch
@@ -263,7 +249,9 @@ fun StatoConsegna(
                 )
                 Text(
                     text = "Data ed ora acquisto: " + ZonedDateTime.parse(deliveryData_ON_DELIVERY.creationTimestamp)
+                        .withZoneSameInstant(ZoneId.of("Europe/Rome"))
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(2.dp)
@@ -289,7 +277,7 @@ fun StatoConsegna(
                                 deliveryData_ON_DELIVERY.currentPosition.lat.toDouble()
                             )
                         )
-                        zoom(14.0)
+                        zoom(14.5)
                     }
                 }
 
@@ -384,8 +372,9 @@ fun StatoConsegna(
                 )
                 Text(
                     text = "Data ed ora acquisto: " + ZonedDateTime.parse(deliveryData_COMPLETED.creationTimestamp)
+                        .withZoneSameInstant(ZoneId.of("Europe/Rome"))
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                    modifier = Modifier
+                        modifier = Modifier
                         .fillMaxWidth()
                         .padding(2.dp)
                         .border(2.dp, lilac, shape = RoundedCornerShape(8.dp)),

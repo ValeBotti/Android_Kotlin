@@ -82,6 +82,7 @@ sealed class Order {
     abstract val currentPosition: Location
 }
 
+
 @Serializable
 data class Order_COMPLETED(
     override val oid: Int,
@@ -103,7 +104,7 @@ data class Order_ON_DELIVERY(
     override val status: String,
     override val deliveryLocation: Location,
     override val currentPosition: Location,
-    val expectedDeliveryTimestamp: String // Aggiunta specifica di Order_ON_DELIVERY
+    val expectedDeliveryTimestamp: String
 ) : Order()
 
 @Serializable
@@ -123,3 +124,15 @@ data class BodyOrder(
     val deliveryLocation: Location,
     val cardNumber: String?
 )
+
+@Serializable
+data class Order_NULL(
+    override val oid: Int = 0,
+    override val mid: Int = 0,
+    override val uid: Int = 0,
+    override val creationTimestamp: String = "1970-01-01T00:00:00Z",
+    override val status: String = "NULL",
+    override val deliveryLocation: Location = Location(0f, 0f),
+    override val currentPosition: Location = Location(0f, 0f),
+    val deliveryTimestamp: String = "1970-01-01T00:00:00Z"
+) : Order()
