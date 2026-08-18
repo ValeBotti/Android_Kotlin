@@ -71,7 +71,7 @@ This project presented me with a few challenges, such as:
 - viewmodel: handling state, lifecycle, business logic (I chose to keep it in here), and so on.
 - MainActivity.kt -> in modern Android programming, you use a single activity.
 
-### Presentation Layer - User Interface
+## Presentation Layer - User Interface
 In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
 
 Back when I created the project, the main goal was to learn Kotlin and pass the exam; now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
