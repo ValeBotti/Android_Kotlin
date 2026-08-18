@@ -18,7 +18,7 @@ This project presented me with a few challenges, such as:
 
 [Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQBei9-F1AD5Qph_f5faK733AecOH8uAjvyG88z45eNunNk?e=XN8hr3)
 
-### Architecture Overview
+## Architecture Overview
 
 1. Presentation Layer — Jetpack Compose UI
 - Composable functions
@@ -46,7 +46,7 @@ This project presented me with a few challenges, such as:
 - Compose lifecycle
 - Handling app closure, background, resume
 
-### Project structure:
+## Project structure:
 > When talking about the project's structure in Jetpack Compose, we refer to packages, not directories. Packages are designed to provide a clear structure to the project that directories cannot provide.
 
 ```text
@@ -77,8 +77,6 @@ In the project, I've created the subdirectory "ui"; it contains all the themes, 
 Back when I created the project, the main goal was to learn Kotlin and pass the exam; now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
 
 [Jetpack Compose UI doc](https://developer.android.com/develop/ui?hl=it)
-
-> Directory structure:
 
 ```text
 ui/
