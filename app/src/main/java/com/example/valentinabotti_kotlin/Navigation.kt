@@ -28,7 +28,7 @@ fun Navigation(
         }
 
         composable(route = Screen.HomeListaMenu.route) {
-            HomeListaMenu(navController = navController, sid= sid, uid= uid)
+            HomeListaMenu(navController = navController, sid= sid)
         }
 
         composable(route = Screen.ProfiloUtente.route) {

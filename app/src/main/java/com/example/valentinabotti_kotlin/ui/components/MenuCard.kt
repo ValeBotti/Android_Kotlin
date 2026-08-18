@@ -2,14 +2,17 @@ package com.example.valentinabotti_kotlin.ui.components
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -90,18 +93,17 @@ fun MenuCard(menu: Menu, sid: String, navController: NavController, viewModel: H
         }
     }
 
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 5.dp)
-            .padding(top=5.dp)
-            .background(Purple40, shape = RoundedCornerShape(5))
+            .padding(2.dp)
+            .background(Purple40)
     ) {
 
         Text(
             text = menu.name,
             modifier = Modifier
-                .padding(bottom = 8.dp),
+                .padding(horizontal = 5.dp, vertical = 5.dp),
             color = DeepPurple,
             fontWeight = FontWeight.Bold
         )
@@ -118,26 +120,26 @@ fun MenuCard(menu: Menu, sid: String, navController: NavController, viewModel: H
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = DeeperPurple, shape = RoundedCornerShape(25))
+                .fillMaxWidth()
+                .background(color = DeeperPurple, shape = RoundedCornerShape(10))
                 .padding(horizontal = 4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Prezzo: ${String.format(menu.price.toString()).replace('.', ',')}€",
                 color = Color.White,
-                modifier = Modifier
-                    .padding(end = 80.dp),
-                fontSize = 12.sp // Imposta una dimensione del testo più piccola
+                modifier = Modifier.padding(horizontal = 2.dp, vertical = 2.dp),
+                fontSize = 12.sp
             )
 
             Text(
                 text = "Tempo di consegna: ${viewModel.formatDeliveryTime(menu.deliveryTime)}",
                 color = Color.White,
-                fontSize = 12.sp // Imposta una dimensione del testo più piccola
+                modifier = Modifier.padding(horizontal = 2.dp, vertical = 2.dp),
+                fontSize = 12.sp
             )
         }
         Box(
@@ -146,14 +148,13 @@ fun MenuCard(menu: Menu, sid: String, navController: NavController, viewModel: H
         ) {
             Text(
                 text = menu.shortDescription,
-                modifier = Modifier.padding(bottom = 2.dp, top = 2.dp)
+                modifier = Modifier.padding(horizontal = 5.dp, vertical = 5.dp)
             )
         }
 
         Box(
             modifier = Modifier
                 .fillMaxSize(),
-            contentAlignment = Alignment.Center
         ) {
             CustomButton(
                 text = "Visualizza Dettagli",

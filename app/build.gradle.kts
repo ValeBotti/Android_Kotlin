@@ -49,9 +49,12 @@ dependencies {
     // Lifecycle & Navigation
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.navigation:navigation-compose:2.6.0")
-    implementation("androidx.room:room-ktx:2.6.1")
     implementation(libs.androidx.lifecycle.process)
-    ksp("androidx.room:room-compiler:2.6.1")
+
+    //Room
+    implementation("androidx.room:room-ktx:2.7.0")
+    ksp("androidx.room:room-compiler:2.7.0")
+
 
     // Networking
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
@@ -60,10 +63,11 @@ dependencies {
 
     // Compose UI
     implementation("androidx.compose.runtime:runtime:1.0.0")
-    implementation("androidx.compose.material3:material3:1.0.0")
+    implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0")
+    implementation("androidx.compose.material:material-icons-extended")
 
-            // Ktor
+    // Ktor
     implementation(libs.ktor.ktor.client.core)
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.logging)

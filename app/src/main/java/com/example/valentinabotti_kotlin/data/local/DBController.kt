@@ -1,7 +1,6 @@
 package com.example.valentinabotti_kotlin.data.local
 
 import android.content.Context
-import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity

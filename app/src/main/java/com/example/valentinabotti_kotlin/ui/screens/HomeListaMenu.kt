@@ -1,9 +1,12 @@
 package com.example.valentinabotti_kotlin.ui.screens
+
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -13,10 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,17 +47,25 @@ import com.example.valentinabotti_kotlin.ui.components.CustomButton
 import com.example.valentinabotti_kotlin.ui.components.MenuCard
 import com.example.valentinabotti_kotlin.viewmodel.HomeListaMenuViewModel
 import com.example.valentinabotti_kotlin.viewmodel.LocationViewModel
-
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.ui.draw.clip
+import com.mapbox.geojson.Point
+import com.mapbox.maps.extension.compose.MapEffect
+import com.mapbox.maps.extension.compose.MapboxMap
+import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
+import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
+import com.mapbox.maps.extension.compose.annotation.rememberIconImage
+import com.mapbox.maps.plugin.locationcomponent.location
 
 @Composable
 fun HomeListaMenu(
     navController: NavHostController,
-    sid: String,
-    uid: Int
+    sid: String
 ) {
     val context = LocalContext.current
 
-    //creo il viewmodel dello screen
     val factoryHomeListaMenu = viewModelFactory {
         initializer {
             HomeListaMenuViewModel()
@@ -62,9 +74,7 @@ fun HomeListaMenu(
 
     val viewModelHomeListaMenu: HomeListaMenuViewModel = viewModel(factory = factoryHomeListaMenu)
 
-
     var menuList by remember { mutableStateOf<List<Menu>>(emptyList()) }
-
 
     val locationViewModel: LocationViewModel = viewModel()
 
@@ -98,56 +108,82 @@ fun HomeListaMenu(
 
 
     if(menuList.size > 0) {
-        LazyColumn(
+        Scaffold(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(WindowInsets.systemBars.asPaddingValues()), // Rispetta i margini del notch
-        ) {
-            if (hasPermission == false) {
-                item {
-                    Text(
-                        text = "PERMESSI DI POSIZIONE NEGATI!",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .background(Color.White),
-                        color = Color(0xFF4B0082)
+                .padding(WindowInsets.systemBars.asPaddingValues()),
+            floatingActionButton = {
+                IconButton(
+                    onClick = { navController.navigate(Screen.ProfiloUtente.route) },
+                    modifier = Modifier.size(35.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.user_circle),
+                        contentDescription = "Profilo utente",
+                        tint = Color.Unspecified
                     )
                 }
-
-            }
-            item {
-                Row(
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .size(200.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            navController.navigate("statoConsegna/${sid}/${0}")
+                        }
                 ) {
+                    val mapViewportState = rememberMapViewportState {
+                        setCameraOptions {
+                            center(Point.fromLngLat(9.683772, 45.05629))
+                            zoom(14.0)
+                        }
+                    }
 
-                    IconButton(
-                        onClick = { navController.navigate(Screen.ProfiloUtente.route) },
-                        modifier = Modifier.size(35.dp)
+                    MapboxMap(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 50.dp)
+                            .padding(WindowInsets.systemBars.asPaddingValues()),
+                        mapViewportState = mapViewportState
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.user_circle),
-                            contentDescription = "Profilo utente",
-                            tint = Color.Unspecified
+
+                        MapEffect(Unit) { mapView ->
+                            mapView.location.updateSettings {
+                                enabled = false
+                            }
+                        }
+
+                        if (currentLocation.lat != 0f && currentLocation.lng != 0f) {
+                            PointAnnotation(
+                                point = Point.fromLngLat(
+                                    currentLocation.lng.toDouble(),
+                                    currentLocation.lat.toDouble()
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        ) { innerPadding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                if (hasPermission == false) {
+                    item {
+                        Text(
+                            text = "PERMESSI DI POSIZIONE NEGATI!",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp)
+                                .background(Color.White),
+                            color = Color(0xFF4B0082)
                         )
                     }
 
-                    CustomButton(
-                        text = "Mappa",
-                        icon = { Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null) },
-                        onClick = { navController.navigate("statoConsegna/${sid}/${0}") },
-                        modifier = Modifier
-                    )
                 }
-            }
 
-
-            items(menuList.size) { index ->
-                MenuCard(menuList[index], sid, navController, viewModelHomeListaMenu)
+                items(menuList.size) { index ->
+                    MenuCard(menuList[index], sid, navController, viewModelHomeListaMenu)
+                }
             }
         }
     } else {
