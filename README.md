@@ -3,6 +3,7 @@
 ### Framework: Jetpack Compose, IDE: Android Studio
 
 A mobile application written in Kotlin using Android Studio and Jetpack Compose, designed as the frontend of a complete food‑delivery platform.
+> Beforehand, I created a cross-platform version of the project using the [React Native Framework](https://github.com/ValeBotti/React-Native-Uni-Project), then I created an [ASP.NET Core Web API web application](https://github.com/ValeBotti/ASP_NET_Core_Web_API) because the previous APIs had been discontinued.
 
 This project presented me with a few challenges, such as:
 
@@ -29,19 +30,19 @@ This project presented me with a few challenges, such as:
 -  Event handling
 -  Business logic
 
-4. Data Layer
+3. Data Layer
 - Room Database
 - PreferenceStorage
 
-5. Networking — Retrofit + OkHttp
+4. Networking — Retrofit + OkHttp
 - Retrofit (API interface)
 - OkHttp (client, logging)
 
-6. Location & Mapbox Integration
+5. Location & Mapbox Integration
 - Request permission
 - Mapbox map rendering + dynamic markers
 
-7. Lifecycle
+6. Lifecycle
 - Compose lifecycle
 - Handling app closure, background, resume
 
@@ -56,8 +57,8 @@ This project presented me with a few challenges, such as:
                 └── model/
                 └── ui/
                 └── viewmodel/
-                    ├── Navigation.kt
-                    └── MainActivity.kt
+                ├── Navigation.kt
+                └── MainActivity.kt
             └── res
             └── drawable/
             └── AndroidManifest.xml
