@@ -45,7 +45,8 @@ This project presented me with a few challenges, such as:
 - Compose lifecycle
 - Handling app closure, background, resume
 
-### UI: #### In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
+### UI:
+#### In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
 
 Back when I created the project, the main goal was to learn Kotlin and pass the exam; now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
 
