@@ -45,8 +45,33 @@ This project presented me with a few challenges, such as:
 - Compose lifecycle
 - Handling app closure, background, resume
 
-### UI:
-#### In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
+### Project directories:
+> When talking about the project's structure in Jetpack Compose, we refer to packages, not directories. Packages are designed to provide a clear structure to the project that directories cannot provide.
+
+```text
+    └── main
+        └── java
+            └── com.example.valentinabotti_kotlin
+                └── data/
+                └── model/
+                └── ui/
+                └── viewmodel/
+                    ├── Navigation.kt
+                    └── MainActivity.kt
+          └── res
+              └── drawable/
+          └── AndroidManifest.xml
+```
+
+- com.<author>.<app_name>: the main package -> that's the application ID that the Play Store uses to uniquely identify the app.
+- data: dealing with DBController, PreferenceStorage, and ApiCalls
+- model: navigation and data classes (all those dear old structures you need when dealing with OOP)
+- ui: presentation layer
+- viewmodel: handling state, lifecycle, business logic (I chose to keep it in here), and so on.
+- MainActivity.kt -> in modern Android programming, you use a single activity.
+
+### Presentation Layer - User Interface
+In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
 
 Back when I created the project, the main goal was to learn Kotlin and pass the exam; now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
 
