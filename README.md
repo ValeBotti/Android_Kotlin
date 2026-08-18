@@ -58,9 +58,9 @@ This project presented me with a few challenges, such as:
                 └── viewmodel/
                     ├── Navigation.kt
                     └── MainActivity.kt
-          └── res
-              └── drawable/
-          └── AndroidManifest.xml
+            └── res
+            └── drawable/
+            └── AndroidManifest.xml
 ```
 
 - com.<author>.<app_name>: the main package -> that's the application ID that the Play Store uses to uniquely identify the app.
