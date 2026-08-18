@@ -64,7 +64,7 @@ This project presented me with a few challenges, such as:
             └── AndroidManifest.xml
 ```
 
-- com.<author>.<app_name>: the main package -> that's the application ID that the Play Store uses to uniquely identify the app.
+- com.< author >.<app_name>: the main package -> that's the application ID that the Play Store uses to uniquely identify the app.
 - data: dealing with DBController, PreferenceStorage, and ApiCalls
 - model: navigation and data classes (all those dear old structures you need when dealing with OOP)
 - ui: presentation layer
