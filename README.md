@@ -46,7 +46,7 @@ This project presented me with a few challenges, such as:
 - Compose lifecycle
 - Handling app closure, background, resume
 
-### Project directories:
+### Project structure:
 > When talking about the project's structure in Jetpack Compose, we refer to packages, not directories. Packages are designed to provide a clear structure to the project that directories cannot provide.
 
 ```text
