@@ -70,3 +70,29 @@ This project presented me with a few challenges, such as:
 - ui: presentation layer
 - viewmodel: handling state, lifecycle, business logic (I chose to keep it in here), and so on.
 - MainActivity.kt -> in modern Android programming, you use a single activity.
+
+## Presentation Layer - User Interface
+
+In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
+Back when I created the project, the main goal was to learn Kotlin and pass the exam. Meanwhile, I was working on my thesis where I developed an Android application using Java.
+As you may know, the programming paradigm has changed a lot: Java for Android relies on imperative programming and XML layouts, while the modern Android standard uses exclusively declarative programming with Kotlin.
+Now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
+
+[Jetpack Compose UI doc](https://developer.android.com/develop/ui?hl=it)
+
+```text
+ui/
+├── theme/
+    ├── Color.kt -> I've imagined this file as a semantic map of colors and meanings
+    ├── Shapes.kt -> predefined shapes
+    ├── Theme.kt -> light, dark, accessibility...
+    └── Type.kt -> typography
+├── screens/     -> components that contain the entire screen (these are switched with navigation)
+    ├── HomeListaMenu.kt -> home page where you can see the list of menus you can buy
+    ├── DettagliMenu.kt -> the page where you can purchase food
+    ├── StatoConsegna.kt -> shows you the map
+    └── ProfiloUtente.kt -> user's profile
+└── components/  -> reusable pieces
+```
+
+> Unidirectional dependency flow: screens use components; components use themes; never the other way around.
