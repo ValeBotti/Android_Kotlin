@@ -53,8 +53,9 @@ Back when I created the project, the main goal was to learn Kotlin and pass the 
 
 > Directory structure:
 
+```text
 ui/
 ├── theme/       -> colors, typography, spacing, shape
 ├── screens/     -> screens
 └── components/  -> reusable pieces
-
+```
