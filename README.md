@@ -74,7 +74,9 @@ This project presented me with a few challenges, such as:
 ## Presentation Layer - User Interface
 In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
 
-Back when I created the project, the main goal was to learn Kotlin and pass the exam; now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
+Back when I created the project, the main goal was to learn Kotlin and pass the exam. Meanwhile, I was working on my thesis where I developed an Android application using Java. As you may know, the programming paradigm has changed a lot: Java for Android relies on imperative programming and XML layouts, while the modern Android standard uses exclusively declarative programming with Kotlin.
+
+Now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
 
 [Jetpack Compose UI doc](https://developer.android.com/develop/ui?hl=it)
 
