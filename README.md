@@ -83,7 +83,7 @@ Now I want to get deeper into learning UI basics that apply to most modern front
 ```text
 ui/
 ├── theme/
-    ├── Color.kt -> I've imagined this file as a semantic map of colors and meanings
+    ├── Color.kt -> a semantic map of colors and meanings
     ├── Shapes.kt -> predefined shapes
     ├── Theme.kt -> light, dark, accessibility...
     └── Type.kt -> typography
