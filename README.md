@@ -18,8 +18,7 @@ This project presented me with a few challenges, such as:
 - PreferenceStorage for session persistence
 - Room Database for local caching and offline support
 
-[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQBei9-F1AD5Qph_f5faK733AecOH8uAjvyG88z45eNunNk?e=XN8hr3)
-
+[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQBXfCrO11-lT5gAQ_EkuQ9aASfNLKs-hqlwI5Xhh_8oRMo?e=qgZEJT)
 ## Architecture Overview
 
 1. [Presentation Layer - User Interface](#1-presentation-layer---user-interface)
