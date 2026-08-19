@@ -80,7 +80,7 @@ Back when I created the project, the main goal was to learn Kotlin and pass the 
 As you may know, the programming paradigm has changed a lot: Java for Android relies on imperative programming and XML layouts, while the modern Android standard uses exclusively declarative programming with Kotlin.
 Now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
 
-[Jetpack Compose UI doc](https://developer.android.com/develop/ui?hl=it)
+[![Material Design 3](https://img.shields.io/badge/Material%20Design%203-UI%20Guidelines-yellow?style=for-the-badge&logo=materialdesign&logoColor=white)](https://m3.material.io/develop/android/jetpack-compose)
 
 ```text
 ui/
