@@ -22,7 +22,7 @@ This project presented me with a few challenges, such as:
 
 ## Architecture Overview
 
-1. Presentation Layer — Jetpack Compose UI
+1. [Presentation Layer](#1-presentation-layer---user-interface)
 - Composable functions
 - State-driven rendering
 - Navigation Compose
@@ -73,7 +73,7 @@ This project presented me with a few challenges, such as:
 - viewmodel: handling state, lifecycle, business logic (I chose to keep it in here), and so on.
 - MainActivity.kt -> in modern Android programming, you use a single activity.
 
-## Presentation Layer - User Interface
+## 1. Presentation Layer - User Interface
 
 In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
 Back when I created the project, the main goal was to learn Kotlin and pass the exam. Meanwhile, I was working on my thesis where I developed an Android application using Java.
