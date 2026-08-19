@@ -22,7 +22,7 @@ This project presented me with a few challenges, such as:
 
 ## Architecture Overview
 
-1. [Presentation Layer](#1-presentation-layer---user-interface)
+1. [Presentation Layer - User Interface](#1-presentation-layer---user-interface)
 - Composable functions
 - State-driven rendering
 - Navigation Compose
