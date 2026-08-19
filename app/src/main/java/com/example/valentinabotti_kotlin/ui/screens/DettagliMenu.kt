@@ -6,21 +6,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -35,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
+import com.example.valentinabotti_kotlin.R
 import com.example.valentinabotti_kotlin.data.local.DBController
 import com.example.valentinabotti_kotlin.data.local.Image
 import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.getMid
@@ -246,66 +245,77 @@ fun DettagliMenu(
         }
     }
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                WindowInsets.systemBars.asPaddingValues()
+            )
+    ) {
 
-    if (menu == MenuDitails(
-            mid = 0,
-            name = "Nome menu",
-            price = 0.0,
-            location = mapOf("lat" to 0f, "lng" to 0f),
-            imageVersion = 0,
-            shortDescription = "Descrizione menu",
-            deliveryTime = 0,
-            longDescription = "Descrizione lunga menu"
-        )) {
-        Spinner()
-    } else {
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    WindowInsets.systemBars.asPaddingValues()
-                )
-                .padding(horizontal = 10.dp), // Aggiunge padding orizzontale
+                .padding(horizontal = 10.dp),
         ) {
             item() {
-                Button(
-                    onClick = { navController.navigate(Screen.HomeListaMenu.route) }, // Usa il callback per cambiare pagina
-                    modifier = Modifier,
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.Black,
-                        containerColor = Color.White
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack, // Usa l'icona di una freccia a sinistra
-                        contentDescription = "Home lista menu"
-                    )
-                    Text(text = "Back")
-                }
-            }
-            item() {
                 Text(
-                    text = menu.name,
                     modifier = Modifier
-                        .padding(5.dp),
+                        .padding(top = 10.dp),
+                    text = menu.name,
                     color = DeepPurple,
                     fontWeight = FontWeight.Bold
                 )
             }
-            item() {
+            item {
+
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .height(350.dp) // altezza per l'immagine
-                        .background(Color.Gray) // placeholder dell'immagine
+                        .align(Alignment.Center)
                 ) {
-                    Log.d("DettagliMenu", "Image: ${image.base64}")
-                    if (image.base64.isNotEmpty() && !image.base64.equals("Immagine")) {
-                        Base64Image(image.base64)
+
+                    Box(
+                        modifier = Modifier
+                            .size(450.dp)
+                    ) {
+                        Log.d("DettagliMenu", "Image: ${image.base64}")
+                        if (image.base64.isNotEmpty() && image.base64 != "Immagine") {
+                            Base64Image(image.base64, null, null, null, null)
+                        }
+                    }
+
+                    IconButton(
+                        onClick = { navController.navigate(Screen.HomeListaMenu.route) },
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding(12.dp)
+                            .size(35.dp)
+                            .background(
+                                Color.White.copy(alpha = 0.5f),
+                                shape = RoundedCornerShape(5.dp)
+                            )
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.left_arrow),
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomEnd)
+                            .padding(12.dp),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        CustomButton(
+                            text = "Buy",
+                            onClick = { buy = true }
+                        )
                     }
                 }
-                Spacer(modifier = Modifier.height(20.dp))
             }
+
             item {
                 Row(
                     modifier = Modifier
@@ -344,19 +354,6 @@ fun DettagliMenu(
                     modifier = Modifier.padding(5.dp),
                     color = Color.Black
                 )
-            }
-
-            item {
-                Box(
-                    modifier = Modifier.fillMaxWidth(), // Assicura che il Box occupi tutta la larghezza disponibile
-                    contentAlignment = Alignment.CenterEnd // Allinea il contenuto a destra
-                ) {
-                    CustomButton(
-                        text = "Acquista",
-                        onClick = { buy = true },
-                        modifier = Modifier
-                    )
-                }
             }
         }
     }

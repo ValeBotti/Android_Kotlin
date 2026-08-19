@@ -66,10 +66,4 @@ class HomeListaMenuViewModel() : ViewModel() {
             } as ImageUI
         }
     }
-
-    fun formatDeliveryTime(deliveryTime: Int): String {
-        var hours = deliveryTime / 60
-        var minutes = deliveryTime % 60
-        return "$hours h $minutes min"
-    }
 }

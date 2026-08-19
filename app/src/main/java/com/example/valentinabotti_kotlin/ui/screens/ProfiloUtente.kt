@@ -35,7 +35,6 @@ import com.example.valentinabotti_kotlin.model.Order_ON_DELIVERY
 import com.example.valentinabotti_kotlin.model.MenuDitails
 import com.example.valentinabotti_kotlin.model.ProfileDataString
 import com.example.valentinabotti_kotlin.model.Screen
-import com.example.valentinabotti_kotlin.ui.screens.Spinner
 import com.example.valentinabotti_kotlin.viewmodel.ProfiloUtenteViewModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -445,7 +444,7 @@ fun ProfiloUtente(
                 .padding(WindowInsets.systemBars.asPaddingValues()), // Rispetta i margini del notch
         ) {
             item {
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.White)
@@ -471,7 +470,15 @@ fun ProfiloUtente(
 
                     // Pulsante a destra con scritta "Salva"
                     Button(
-                        onClick = { viewModelProfiloUtente.sendUserInfoToServer(datiProfilo, context, sid, uid, navController) },
+                        onClick = {
+                            viewModelProfiloUtente.sendUserInfoToServer(
+                                datiProfilo,
+                                context,
+                                sid,
+                                uid,
+                                navController
+                            )
+                        },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             contentColor = Color.Black,
@@ -636,7 +643,5 @@ fun ProfiloUtente(
                 }
             }
         }
-    } else {
-        Spinner()
     }
 }

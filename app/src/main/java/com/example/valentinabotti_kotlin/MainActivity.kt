@@ -6,15 +6,25 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.livedata.observeAsState
 import com.example.valentinabotti_kotlin.ui.theme.ValentinaBotti_KotlinTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -38,9 +48,11 @@ class MainActivity : ComponentActivity() {
             ValentinaBotti_KotlinTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                        App(
-                            modifier = Modifier.padding(innerPadding)
-                        )
+                    App(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+
+                    StatusBarProtection()
 
                 }
             }
@@ -105,4 +117,28 @@ fun App(
             lifecycle.removeObserver(observer)
         }
     }
+}
+
+@Composable
+private fun StatusBarProtection(
+    color: Color = MaterialTheme.colorScheme.surfaceContainer,
+) {
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(
+                with(LocalDensity.current) {
+                    (WindowInsets.statusBars.getTop(this) * 1.2f).toDp()
+                }
+            )
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        color.copy(alpha = 1f),
+                        color.copy(alpha = 0.8f),
+                        Color.Transparent
+                    )
+                )
+            )
+    )
 }

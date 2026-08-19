@@ -25,9 +25,8 @@ fun Splash(modifier: Modifier = Modifier, navController: NavController) {
     }
 
     LaunchedEffect(Unit) {
-        delay(10_000) // Attendi 100 millisecondo
         navController.navigate(Screen.HomeListaMenu.route) {
-            popUpTo(Screen.Splash.route) { inclusive = true } // Rimuove Splash dalla backstack
+            popUpTo(Screen.Splash.route) { inclusive = true }
         }
     }
 }

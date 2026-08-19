@@ -2,18 +2,11 @@ package com.example.valentinabotti_kotlin.ui.components
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -24,20 +17,13 @@ import androidx.navigation.NavController
 import com.example.valentinabotti_kotlin.model.Menu
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import com.example.valentinabotti_kotlin.data.local.DBController
 import com.example.valentinabotti_kotlin.data.local.Image
 import com.example.valentinabotti_kotlin.data.local.Word
 import com.example.valentinabotti_kotlin.model.ImageUI
-import com.example.valentinabotti_kotlin.ui.theme.Purple40
 import com.example.valentinabotti_kotlin.viewmodel.HomeListaMenuViewModel
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.example.valentinabotti_kotlin.ui.theme.DeepPurple
-import com.example.valentinabotti_kotlin.ui.theme.DeeperPurple
-import com.example.valentinabotti_kotlin.ui.theme.Purple80
 
 @Composable
 fun MenuCard(menu: Menu, sid: String, navController: NavController, viewModel: HomeListaMenuViewModel) {
@@ -93,73 +79,23 @@ fun MenuCard(menu: Menu, sid: String, navController: NavController, viewModel: H
         }
     }
 
-    Card(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(2.dp)
-            .background(Purple40)
+            .clickable {
+                navController.navigate("dettagliMenu/{sid}/{uid}/${menu.mid}")
+            }
+            .background(Color.Black)
     ) {
-
-        Text(
-            text = menu.name,
-            modifier = Modifier
-                .padding(horizontal = 5.dp, vertical = 5.dp),
-            color = DeepPurple,
-            fontWeight = FontWeight.Bold
-        )
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .height(150.dp)
-                .background(Purple80)
         ) {
-            Log.d("MenuCard", "immagineMostrata: ${image.base64}")
-            if (image.base64.isNotEmpty() && image.base64 != "") {
-                Base64Image(image.base64)
+            if (image.base64.isNotEmpty()) {
+                Base64Image(image.base64, menu.name, menu.shortDescription, menu.price, menu.deliveryTime)
             }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = DeeperPurple, shape = RoundedCornerShape(10))
-                .padding(horizontal = 4.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Prezzo: ${String.format(menu.price.toString()).replace('.', ',')}€",
-                color = Color.White,
-                modifier = Modifier.padding(horizontal = 2.dp, vertical = 2.dp),
-                fontSize = 12.sp
-            )
-
-            Text(
-                text = "Tempo di consegna: ${viewModel.formatDeliveryTime(menu.deliveryTime)}",
-                color = Color.White,
-                modifier = Modifier.padding(horizontal = 2.dp, vertical = 2.dp),
-                fontSize = 12.sp
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Text(
-                text = menu.shortDescription,
-                modifier = Modifier.padding(horizontal = 5.dp, vertical = 5.dp)
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
-            CustomButton(
-                text = "Visualizza Dettagli",
-                onClick = { navController.navigate(route = "dettagliMenu/{sid}/{uid}/${menu.mid}") }
-            )
         }
     }
 }
