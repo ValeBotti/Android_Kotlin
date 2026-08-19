@@ -1,4 +1,5 @@
 # KOTLIN ANDROID MOBILE APP -> FOOD DELIVERY PLATFORM
+![Kotlin](https://shields.io)
 
 #### Framework: Jetpack Compose, IDE: Android Studio
 
