@@ -1,8 +1,8 @@
 # KOTLIN ANDROID MOBILE APP -> FOOD DELIVERY PLATFORM
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-Dev-blue?logo=kotlin)](https://kotlinlang.org)
-[![Android Studio](https://img.shields.io/badge/Android%20Studio-IDE-green?style=for-the-badge&logo=androidstudio&logoColor=white)](https://developer.android.com/studio)
-[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-UI%20Framework-purple?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![Android Studio](https://img.shields.io/badge/Android%20Studio-IDE-green?style=for-the-badge&logo=androidstudio&logoColor=white)](https://developer.android.com/studio) |
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-UI%20Framework-purple?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose) |
 
 A mobile application written in Kotlin using Android Studio and Jetpack Compose, designed as the frontend of a complete food‑delivery platform.
 > Beforehand, I created a cross-platform version of the project using the [React Native Framework](https://github.com/ValeBotti/React-Native-Uni-Project), then I created an [ASP.NET Core Web API web application](https://github.com/ValeBotti/ASP_NET_Core_Web_API) because the previous APIs had been discontinued.
