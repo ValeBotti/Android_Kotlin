@@ -1,6 +1,6 @@
 # KOTLIN ANDROID MOBILE APP -> FOOD DELIVERY PLATFORM
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-Dev-blue?logo=kotlin)](https://kotlinlang.org)
+[![Kotlin Language](https://img.shields.io/badge/Kotlin-Language-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Android Studio](https://img.shields.io/badge/Android%20Studio-IDE-green?style=for-the-badge&logo=androidstudio&logoColor=white)](https://developer.android.com/studio)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-UI%20Framework-purple?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
 
