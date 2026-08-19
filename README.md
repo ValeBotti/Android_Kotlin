@@ -75,9 +75,9 @@ This project presented me with a few challenges, such as:
 ## 1. Presentation Layer - User Interface
 
 In the project, I've created the subdirectory "ui"; it contains all the themes, screens, and components I've created for the presentation layer.
-Back when I created the project, the main goal was to learn Kotlin and pass the exam. Meanwhile, I was working on my thesis where I developed an Android application using Java.
+Back when I fisrt created the project, the main goal was to learn Kotlin and pass the exam. Meanwhile, I was working on my thesis where I developed an Android application using Java.
 As you may know, the programming paradigm has changed a lot: Java for Android relies on imperative programming and XML layouts, while the modern Android standard uses exclusively declarative programming with Kotlin.
-Now I want to get deeper into learning UI basics that apply to most modern frontend frameworks.
+Now I've changed the graphics by studying the following documentation.
 
 [![Material Design 3](https://img.shields.io/badge/Material%20Design%203-UI%20Guidelines-yellow?style=for-the-badge&logo=materialdesign&logoColor=white)](https://m3.material.io/develop/android/jetpack-compose)
 
