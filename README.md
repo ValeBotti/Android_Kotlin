@@ -31,19 +31,19 @@ This project presented me with a few challenges, such as:
 -  Event handling
 -  Business logic
 
-3. Data Layer
+3. [Data Layer](#3-data-layer)
 - Room Database
 - PreferenceStorage
 
-4. Networking — Retrofit + OkHttp
+4. [Networking — Retrofit + OkHttp](#4-networking--retrofit--okhttp)
 - Retrofit (API interface)
 - OkHttp (client, logging)
 
-5. Location & Mapbox Integration
+5. [Location & Mapbox Integration](#5-location--mapbox-integration)
 - Request permission
 - Mapbox map rendering + dynamic markers
 
-6. Lifecycle
+6. [Lifecycle](#6-lifecycle)
 - Compose lifecycle
 - Handling app closure, background, resume
 
@@ -99,3 +99,11 @@ ui/
 > Unidirectional dependency flow: screens use components; components use themes; never the other way around.
 
 ## 2. ViewModel Layer — MVVM
+
+## 3. Data Layer
+
+## 4. Networking — Retrofit + OkHttp
+
+## 5. Location & Mapbox Integration
+
+## 6. Lifecycle
