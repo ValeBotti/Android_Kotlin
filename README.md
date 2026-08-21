@@ -26,7 +26,7 @@ This project presented me with a few challenges, such as:
 - State-driven rendering
 - Navigation Compose
 
-2. ViewModel Layer — MVVM
+2. [ViewModel Layer — MVVM](2.-ViewModel-Layer-—-MVVM)
 -  StateFlow / MutableState
 -  Event handling
 -  Business logic
@@ -97,3 +97,5 @@ ui/
 ```
 
 > Unidirectional dependency flow: screens use components; components use themes; never the other way around.
+
+## 2. ViewModel Layer — MVVM
