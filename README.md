@@ -99,6 +99,20 @@ ui/
 > Unidirectional dependency flow: screens use components; components use themes; never the other way around.
 
 ## 2. ViewModel Layer — MVVM
+```text
+viewmodel/
+├── theme/
+    ├── Color.kt -> a semantic map of colors and meanings
+    ├── Shapes.kt -> predefined shapes
+    ├── Theme.kt -> light, dark, accessibility...
+    └── Type.kt -> typography
+├── screens/     -> components that contain the entire screen (these are switched with navigation)
+    ├── HomeListaMenu.kt -> home page where you can see the list of menus you can buy
+    ├── DettagliMenu.kt -> the page where you can purchase food
+    ├── StatoConsegna.kt -> shows you the map
+    └── ProfiloUtente.kt -> user's profile
+└── components/  -> reusable pieces
+```
 
 ## 3. Data Layer
 
