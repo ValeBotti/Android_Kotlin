@@ -26,7 +26,7 @@ This project presented me with a few challenges, such as:
 - State-driven rendering
 - Navigation Compose
 
-2. [ViewModel Layer — MVVM](#2.-ViewModel-Layer---MVVM)
+2. [ViewModel Layer — MVVM](#2-viewmodel-layer--mvvm)
 -  StateFlow / MutableState
 -  Event handling
 -  Business logic
