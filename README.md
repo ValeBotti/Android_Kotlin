@@ -17,8 +17,8 @@ This project presented me with a few challenges, such as:
 - Mapbox integration for real‑time drone tracking
 - PreferenceStorage for session persistence
 - Room Database for local caching and offline support
+[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQAPxBZuqFJNS4N0WywSQeGsAZGNn4xUa6tNhmYs6M-xQO4?e=4M3usG)
 
-[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQBXfCrO11-lT5gAQ_EkuQ9aASfNLKs-hqlwI5Xhh_8oRMo?e=qgZEJT)
 ## Architecture Overview
 
 1. [Presentation Layer - User Interface](#1-presentation-layer---user-interface)
@@ -97,27 +97,3 @@ ui/
 ```
 
 > Unidirectional dependency flow: screens use components; components use themes; never the other way around.
-
-## 2. ViewModel Layer — MVVM
-```text
-viewmodel/
-├── theme/
-    ├── Color.kt -> a semantic map of colors and meanings
-    ├── Shapes.kt -> predefined shapes
-    ├── Theme.kt -> light, dark, accessibility...
-    └── Type.kt -> typography
-├── screens/     -> components that contain the entire screen (these are switched with navigation)
-    ├── HomeListaMenu.kt -> home page where you can see the list of menus you can buy
-    ├── DettagliMenu.kt -> the page where you can purchase food
-    ├── StatoConsegna.kt -> shows you the map
-    └── ProfiloUtente.kt -> user's profile
-└── components/  -> reusable pieces
-```
-
-## 3. Data Layer
-
-## 4. Networking — Retrofit + OkHttp
-
-## 5. Location & Mapbox Integration
-
-## 6. Lifecycle
