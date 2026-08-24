@@ -41,11 +41,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-val lilac = Color(0xFFC8A2C8)
-val darkLilac = Color(0xFFAB8AB3)
-val green = Color(0xFFB8D89A)
-val deepLilac = Color(0xFF8E7099)
-
 @Composable
 fun ProfiloUtente(
     navController: NavHostController,

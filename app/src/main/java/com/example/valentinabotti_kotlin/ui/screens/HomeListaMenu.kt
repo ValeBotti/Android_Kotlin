@@ -1,7 +1,5 @@
 package com.example.valentinabotti_kotlin.ui.screens
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
