@@ -9,18 +9,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.valentinabotti_kotlin.model.Screen
-import kotlinx.coroutines.delay
 
 @Composable
 fun Splash(modifier: Modifier = Modifier, navController: NavController) {
 
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center // Centra il contenuto
+        contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            color = Color.LightGray, // Colore grigio chiaro
-            strokeWidth = 4.dp      // Spessore dell'indicatore
+            color = Color.LightGray,
+            strokeWidth = 4.dp
         )
     }
 

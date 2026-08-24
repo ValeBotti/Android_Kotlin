@@ -7,15 +7,19 @@ import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -126,36 +130,39 @@ fun HomeListaMenu(
         controller.isAppearanceLightStatusBars = false
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-                            .padding(WindowInsets.systemBars.asPaddingValues())
-                            .background(Color.Black),
-        topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-                    .background(Color.Black)
-            ) {
+    if (menuList.size > 0) {
 
+        Scaffold(
+            modifier = Modifier.fillMaxSize()
+                .padding(WindowInsets.systemBars.asPaddingValues())
+                .background(Color.Black),
+            topBar = {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(5.dp))
+                        .height(65.dp)
+                        .fillMaxWidth()
+                        .background(Color.Black)
                 ) {
 
                     if (currentLocation.lat != 0f && currentLocation.lng != 0f) {
 
                         val mapViewportState = rememberMapViewportState {
                             setCameraOptions {
-                                center(Point.fromLngLat(currentLocation.lng.toDouble(), currentLocation.lat.toDouble()))
+                                center(
+                                    Point.fromLngLat(
+                                        currentLocation.lng.toDouble(),
+                                        currentLocation.lat.toDouble()
+                                    )
+                                )
                                 zoom(12.0)
                             }
                         }
 
                         MapboxMap(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .height(60.dp)
+                                .align(Alignment.TopEnd)
+                                .width(300.dp)
                                 .clip(RoundedCornerShape(5.dp)),
                             mapViewportState = mapViewportState
                         ) {
@@ -174,74 +181,68 @@ fun HomeListaMenu(
                             )
                         }
                     }
-                }
 
-                IconButton(
-                    onClick = { navController.navigate(Screen.ProfiloUtente.route) },
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(vertical = 2.dp)
-                        .background(
-                            Color.White,
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                ) {
-                    Icon(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = R.drawable.user),
-                        contentDescription = "Profilo utente",
-                        tint = Color.Black
-                    )
-                }
-
-
-                IconButton(
-                    onClick = { navController.navigate("statoConsegna/${sid}/${0}") },
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(5.dp)
-                        .size(50.dp)
-                        .background(
-                            Color.Black.copy(alpha = 0.5f),
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                ) {
-                    Icon(
-                        modifier = Modifier.size(40.dp),
-                        painter = painterResource(id = R.drawable.map),
-                        contentDescription = "Mappa",
-                        tint = Purple40
-                    )
-                }
-            }
-        }
-    ) { innerPadding ->
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = innerPadding.calculateTopPadding()
-                )
-                .background(Color.Black),
-        )  {
-
-            if (hasPermission == false) {
-                item {
-                    Text(
-                        text = "PERMESSI DI POSIZIONE NEGATI!",
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .background(Color.White),
-                        color = Color(0xFF4B0082)
+                            .fillMaxHeight()
+                            .align(Alignment.TopEnd)
+                            .width(300.dp)
+                            .clip(RoundedCornerShape(5.dp))
+                            .clickable {
+                                navController.navigate("statoConsegna/${sid}/${0}")
+                            }
                     )
+
+                    IconButton(
+                        onClick = { navController.navigate(Screen.ProfiloUtente.route) },
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding( 6.dp)
+                            .border(
+                                width = 2.dp,
+                                color = Color.White,
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.user),
+                            contentDescription = "Profilo utente",
+                            tint = Color.White
+                        )
+                    }
                 }
             }
+        ) { innerPadding ->
 
-            items(menuList.size) { index ->
-                MenuCard(menuList[index], sid, navController, viewModelHomeListaMenu)
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = innerPadding.calculateTopPadding()
+                    )
+                    .background(Color.Black),
+            ) {
+
+                if (hasPermission == false) {
+                    item {
+                        Text(
+                            text = "PERMESSI DI POSIZIONE NEGATI!",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp)
+                                .background(Color.White),
+                            color = Color(0xFF4B0082)
+                        )
+                    }
+                }
+
+                items(menuList.size) { index ->
+                    MenuCard(menuList[index], sid, navController, viewModelHomeListaMenu)
+                }
             }
         }
+    } else {
+        Spinner()
     }
 }

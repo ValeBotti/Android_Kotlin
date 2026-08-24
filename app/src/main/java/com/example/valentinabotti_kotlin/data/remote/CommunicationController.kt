@@ -20,7 +20,7 @@ import androidx.core.net.toUri
 
 object CommunicationController {
     //val BASE_URL = "http://10.0.2.2:5077/api"//localhost
-    val BASE_URL = "http://192.168.1.12:5077/api" //Retrofit uses port 80 by default
+    val BASE_URL = "http://192.168.1.16:5077/api"
     var sid: String? = null
     private val TAG = CommunicationController::class.simpleName
 

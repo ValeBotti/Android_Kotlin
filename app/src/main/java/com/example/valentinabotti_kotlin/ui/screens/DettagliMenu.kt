@@ -245,59 +245,54 @@ fun DettagliMenu(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                WindowInsets.systemBars.asPaddingValues()
-            )
-    ) {
+    if (menu.mid != 0) {
 
         LazyColumn(
             modifier = Modifier
-                .padding(horizontal = 10.dp),
+                .padding(WindowInsets.systemBars.asPaddingValues()),
         ) {
-            item() {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 10.dp),
-                    text = menu.name,
-                    color = DeepPurple,
-                    fontWeight = FontWeight.Bold
-                )
-            }
             item {
 
                 Box(
                     modifier = Modifier
-                        .align(Alignment.Center)
+                        .padding(10.dp)
+                        .height(500.dp)
                 ) {
-
-                    Box(
-                        modifier = Modifier
-                            .size(450.dp)
-                    ) {
-                        Log.d("DettagliMenu", "Image: ${image.base64}")
-                        if (image.base64.isNotEmpty() && image.base64 != "Immagine") {
-                            Base64Image(image.base64, null, null, null, null)
-                        }
+                    Log.d("DettagliMenu", "Image: ${image.base64}")
+                    if (image.base64.isNotEmpty() && image.base64 != "Immagine") {
+                        Base64Image(image.base64, null, null, null, null)
                     }
 
-                    IconButton(
-                        onClick = { navController.navigate(Screen.HomeListaMenu.route) },
+                    Row(
                         modifier = Modifier
                             .align(Alignment.TopStart)
-                            .padding(12.dp)
-                            .size(35.dp)
-                            .background(
-                                Color.White.copy(alpha = 0.5f),
-                                shape = RoundedCornerShape(5.dp)
-                            )
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.left_arrow),
-                            contentDescription = "Back",
-                            tint = Color.White
+                        IconButton(
+                            onClick = { navController.navigate(Screen.HomeListaMenu.route) },
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(35.dp)
+                                .background(
+                                    Color.White.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.left_arrow),
+                                contentDescription = "Back",
+                                tint = Color.Black
+                            )
+                        }
+
+                        Text(
+                            modifier = Modifier
+                                .padding(top = 10.dp)
+                                .background(
+                                    color = DeepPurple
+                                ),
+                            text = menu.name,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
                         )
                     }
 
@@ -317,32 +312,44 @@ fun DettagliMenu(
             }
 
             item {
-                Row(
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = DeeperPurple, shape = RoundedCornerShape(25))
-                        .padding(5.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(horizontal = 10.dp),
                 ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = DeeperPurple,
+                                shape = RoundedCornerShape(5.dp)
+                            )
+                            .padding(horizontal = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
 
-                    Text(
-                        text = "Prezzo: ${String.format(menu.price.toString()).replace('.', ',')}€",
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
+                        Text(
+                            text = "Prezzo: ${
+                                String.format(menu.price.toString()).replace('.', ',')
+                            }€",
+                            color = Color.White,
+                            fontSize = 12.sp
+                        )
 
-                    Text(
-                        text = "Tempo di consegna: ${viewModelDettagli.formatDeliveryTime(menu.deliveryTime)}",
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
+                        Text(
+                            text = "Tempo di consegna: ${
+                                viewModelDettagli.formatDeliveryTime(menu.deliveryTime)
+                            }",
+                            color = Color.White,
+                            fontSize = 12.sp
+                        )
+                    }
                 }
             }
             item() {
                 Text(
                     text = menu.shortDescription,
-                    modifier = Modifier.padding(5.dp)
+                    modifier = Modifier.padding(10.dp)
                         .background(PurpleGrey80),
                     color = Color.Black,
                     fontStyle = FontStyle.Italic
@@ -351,10 +358,12 @@ fun DettagliMenu(
             item() {
                 Text(
                     text = menu.longDescription,
-                    modifier = Modifier.padding(5.dp),
+                    modifier = Modifier.padding(10.dp),
                     color = Color.Black
                 )
             }
         }
+    } else {
+        Spinner()
     }
 }
