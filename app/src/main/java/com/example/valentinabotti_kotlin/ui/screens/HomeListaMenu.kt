@@ -51,18 +51,14 @@ import com.example.valentinabotti_kotlin.ui.components.MenuCard
 import com.example.valentinabotti_kotlin.viewmodel.HomeListaMenuViewModel
 import com.example.valentinabotti_kotlin.viewmodel.LocationViewModel
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
-import com.example.valentinabotti_kotlin.ui.theme.Purple40
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.compose.MapEffect
 import com.mapbox.maps.extension.compose.MapboxMap
 import com.mapbox.maps.extension.compose.animation.viewport.rememberMapViewportState
 import com.mapbox.maps.extension.compose.annotation.generated.PointAnnotation
-import com.mapbox.maps.extension.compose.annotation.rememberIconImage
 import com.mapbox.maps.plugin.locationcomponent.location
 
 @Composable

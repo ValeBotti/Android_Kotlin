@@ -3,18 +3,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -41,7 +35,6 @@ import com.example.valentinabotti_kotlin.model.ProfileDataString
 import com.example.valentinabotti_kotlin.model.Screen
 import com.example.valentinabotti_kotlin.ui.components.CustomButton
 import com.example.valentinabotti_kotlin.ui.theme.DeepPurple
-import com.example.valentinabotti_kotlin.ui.theme.DeeperPurple
 import com.example.valentinabotti_kotlin.ui.theme.PurpleGrey80
 import com.example.valentinabotti_kotlin.viewmodel.ProfiloUtenteViewModel
 import java.time.ZoneId

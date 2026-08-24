@@ -1,6 +1,5 @@
 package com.example.valentinabotti_kotlin.data.remote
-//l'objacet è come una classe statica in java, ha una sola istanza
-import android.net.Uri
+
 import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
