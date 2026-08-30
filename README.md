@@ -17,8 +17,8 @@ This project presented me with a few challenges, such as:
 - Mapbox integration for real‑time drone tracking
 - PreferenceStorage for session persistence
 - Room Database for local caching and offline support
-
-[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQBK2ffQntj6QLWQAsoVn-odAY25Lk6DVwCK2zPDL_PyEQY?e=lRdBua)
+  
+[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQA6Msk4mdmRQJMnACszsxheAVZjioAjhzYnK7m92JqiaVo?e=fs89JP)
 
 ## Architecture Overview
 
