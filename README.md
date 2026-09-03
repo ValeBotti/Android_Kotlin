@@ -25,29 +25,29 @@ This project presented me with a few challenges, such as:
 
 ## Architecture Overview
 
-1. [Presentation Layer - User Interface](#1-presentation-layer---user-interface)
+1. Presentation Layer - User Interface
 - Composable functions
 - State-driven rendering
 - Navigation Compose
 
-2. [ViewModel Layer — MVVM](#2-viewmodel-layer--mvvm)
+2. ViewModel Layer — MVVM
 -  StateFlow / MutableState
 -  Event handling
 -  Business logic
 
-3. [Data Layer](#3-data-layer)
+3. Data Layer
 - Room Database
 - PreferenceStorage
 
-4. [Networking — Retrofit + OkHttp](#4-networking--retrofit--okhttp)
+4. Networking — Retrofit + OkHttp
 - Retrofit (API interface)
 - OkHttp (client, logging)
 
-5. [Location & Mapbox Integration](#5-location--mapbox-integration)
+5. Location & Mapbox Integration
 - Request permission
 - Mapbox map rendering + dynamic markers
 
-6. [Lifecycle](#6-lifecycle)
+6. Lifecycle
 - Compose lifecycle
 - Handling app closure, background, resume
 
