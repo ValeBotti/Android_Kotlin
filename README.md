@@ -4,6 +4,9 @@
 [![Android Studio](https://img.shields.io/badge/Android%20Studio-IDE-green?style=for-the-badge&logo=androidstudio&logoColor=white)](https://developer.android.com/studio)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-UI%20Framework-purple?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
 
+> The core concept, structure, and requirements for this project were provided by Professor Sergio Mascetti as part of the "Mobile Computing" course at UNIMI. 
+> I independently developed the full implementation by applying the knowledge and methodologies taught in class.
+
 A mobile application written in Kotlin using Android Studio and Jetpack Compose, designed as the frontend of a complete food‑delivery platform.
 > Beforehand, I created a cross-platform version of the project using the [React Native Framework](https://github.com/ValeBotti/React-Native-Uni-Project), then I created an [ASP.NET Core Web API web application](https://github.com/ValeBotti/ASP_NET_Core_Web_API) because the previous APIs had been discontinued.
 
