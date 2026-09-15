@@ -94,7 +94,7 @@ fun MenuCard(menu: Menu, sid: String, navController: NavController, viewModel: H
                 .height(150.dp)
         ) {
             if (image.base64.isNotEmpty()) {
-                Base64Image(image.base64, menu.name, menu.shortDescription, menu.price, menu.deliveryTime)
+                MenuImage(image.base64, menu.name, menu.shortDescription, menu.price, menu.deliveryTime)
             }
         }
     }

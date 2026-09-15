@@ -53,8 +53,8 @@ import com.example.valentinabotti_kotlin.data.local.PreferencesDataStore.saveOid
 import com.example.valentinabotti_kotlin.model.ImageUI
 import com.example.valentinabotti_kotlin.model.MenuDitails
 import com.example.valentinabotti_kotlin.model.Screen
-import com.example.valentinabotti_kotlin.ui.components.Base64Image
 import com.example.valentinabotti_kotlin.ui.components.CustomButton
+import com.example.valentinabotti_kotlin.ui.components.MenuImage
 import com.example.valentinabotti_kotlin.ui.theme.DeepPurple
 import com.example.valentinabotti_kotlin.ui.theme.DeeperPurple
 import com.example.valentinabotti_kotlin.ui.theme.PurpleGrey80
@@ -259,7 +259,7 @@ fun DettagliMenu(
                 ) {
                     Log.d("DettagliMenu", "Image: ${image.base64}")
                     if (image.base64.isNotEmpty() && image.base64 != "Immagine") {
-                        Base64Image(image.base64, null, null, null, null)
+                        MenuImage(image.base64, null, null, null, null)
                     }
 
                     Row(

@@ -149,9 +149,9 @@ fun StatoConsegna(
 
         while (true) {
 
-            Log.d("StatoConsegna", "Polling → fetchOrder(oid=$oidCurrent, sid=$sidCurrent)")
+            Log.d("StatoConsegna", "Polling → fetchOrder(oid=$oidCurrent, sid=$currentLocation)")
 
-            val orderFetched = viewModel.fetchOrder(oidCurrent, sidCurrent)
+            val orderFetched = viewModel.fetchOrder(oidCurrent, currentLocation)
 
             when (orderFetched) {
 

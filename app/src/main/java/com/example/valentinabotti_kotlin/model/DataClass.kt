@@ -44,8 +44,7 @@ data class ProfileDataModifiedByUser(
     val cardNumber: String,
     val cardExpireMonth: Int,
     val cardExpireYear: Int,
-    val cardCVV: String,
-    val sid: String
+    val cardCVV: String
 )
 
 @Serializable

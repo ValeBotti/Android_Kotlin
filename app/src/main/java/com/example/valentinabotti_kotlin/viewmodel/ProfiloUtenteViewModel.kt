@@ -117,7 +117,7 @@ class ProfiloUtenteViewModel() : ViewModel() {
                         lastOid = datiProfiloString.lastOid,
                         orderStatus = datiProfiloString.orderStatus
                     )
-                    ApiCalls.putUserNewInfo(sid, uid, datiProfilo)
+                    ApiCalls.putUserNewInfo(uid, datiProfilo)
                     Log.d("sendUserInfoToServer", "Dati inviati correttamente.")
                     AlertDialog.Builder(context)
                         .setTitle("Dati personali salvati")
@@ -136,11 +136,11 @@ class ProfiloUtenteViewModel() : ViewModel() {
         }
     }
 
-    suspend fun fetchOrder_ON_DELIVERY(oid: Int?, sid: String?): Order_ON_DELIVERY {
+    suspend fun fetchOrder_ON_DELIVERY(oid: Int?, currentLocation: Location): Order_ON_DELIVERY {
         return withContext(Dispatchers.IO) {
             try {
-                if (sid != null && oid != null) {
-                    val order = ApiCalls.getOrder(oid = oid, sid) as Order_ON_DELIVERY
+                if (oid != null) {
+                    val order = ApiCalls.getOrder(oid = oid, currentLocation) as Order_ON_DELIVERY
                     Log.d("RecuperoOrdine", "Order retrieved: $order")
                     order
                 } else {
@@ -172,11 +172,11 @@ class ProfiloUtenteViewModel() : ViewModel() {
         }
     }
 
-    suspend fun fetchOrder_COMPLETED(oid: Int?, sid: String?): Order_COMPLETED {
+    suspend fun fetchOrder_COMPLETED(oid: Int?, currentLocation: Location): Order_COMPLETED {
         return withContext(Dispatchers.IO) {
             try {
-                if (sid != null && oid != null) {
-                val order = ApiCalls.getOrder(oid = oid, sid) as Order_COMPLETED
+                if (oid != null) {
+                val order = ApiCalls.getOrder(oid = oid, currentLocation) as Order_COMPLETED
                 Log.d("RecuperoOrdine", "Order retrieved: $order")
                 order
                 } else {

@@ -7,16 +7,15 @@ import com.example.valentinabotti_kotlin.model.Location
 import com.example.valentinabotti_kotlin.model.MenuDitails
 import com.example.valentinabotti_kotlin.model.Order
 import com.example.valentinabotti_kotlin.model.Order_COMPLETED
-import com.example.valentinabotti_kotlin.model.Order_ON_DELIVERY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class StatoConsegnaViewModel() : ViewModel() {
 
-    suspend fun fetchOrder(oid: Int, sid: String): Order {
+    suspend fun fetchOrder(oid: Int, currentLocation: Location): Order {
         return withContext(Dispatchers.IO) {
             try {
-                val order = ApiCalls.getOrder(oid = oid, sid = sid)
+                val order = ApiCalls.getOrder(oid = oid, currentLocation = currentLocation)
                 Log.d("RecuperoOrdine", "Order retrieved: $order")
                 order
             } catch (e: Exception) {

@@ -16,6 +16,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +37,7 @@ import com.example.valentinabotti_kotlin.model.Screen
 import com.example.valentinabotti_kotlin.ui.components.CustomButton
 import com.example.valentinabotti_kotlin.ui.theme.DeepPurple
 import com.example.valentinabotti_kotlin.ui.theme.PurpleGrey80
+import com.example.valentinabotti_kotlin.viewmodel.LocationViewModel
 import com.example.valentinabotti_kotlin.viewmodel.ProfiloUtenteViewModel
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -57,6 +59,15 @@ fun ProfiloUtente(
 
     val viewModelProfiloUtente: ProfiloUtenteViewModel = viewModel(factory = factoryProfiloUtente)
 
+    val factoryLocation = viewModelFactory {
+        initializer {
+            LocationViewModel()
+        }
+    }
+
+    val locationViewModel: LocationViewModel = viewModel(factory = factoryLocation)
+
+    val currentLocation by locationViewModel.currentLocation.collectAsState()
 
     var datiProfilo by remember {
         mutableStateOf(
@@ -132,7 +143,7 @@ fun ProfiloUtente(
 
         if (datiProfilo.orderStatus == "ON_DELIVERY") {
             datiUltimoOrdine_ON_DELIVERY =
-                viewModelProfiloUtente.fetchOrder_ON_DELIVERY(datiProfilo.lastOid, sid)
+                viewModelProfiloUtente.fetchOrder_ON_DELIVERY(datiProfilo.lastOid, currentLocation)
             if (datiUltimoOrdine_ON_DELIVERY.mid != 0) {
                 menu = viewModelProfiloUtente.retriveMenuDitails(
                     datiUltimoOrdine_ON_DELIVERY.mid,
@@ -144,7 +155,7 @@ fun ProfiloUtente(
             Log.d("ProfiloUtente", "Ultimo ordine in consegna menu: $menu")
         } else if (datiProfilo.orderStatus == "COMPLETED") {
             datiUltimoOrdine_COMPLETED =
-                viewModelProfiloUtente.fetchOrder_COMPLETED(datiProfilo.lastOid, sid)
+                viewModelProfiloUtente.fetchOrder_COMPLETED(datiProfilo.lastOid, currentLocation)
             if (datiUltimoOrdine_COMPLETED.mid != 0) {
                 menu = viewModelProfiloUtente.retriveMenuDitails(
                     datiUltimoOrdine_COMPLETED.mid,

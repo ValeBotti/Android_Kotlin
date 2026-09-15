@@ -64,7 +64,6 @@ object ApiCalls {
             val httpResponse = CommunicationController.genericRequest(
                 url,
                 CommunicationController.HttpMethod.GET,
-                queryParameters = mapOf("sid" to sid)
             )
 
             // Controllo se la risposta è andata a buon fine
@@ -108,7 +107,7 @@ object ApiCalls {
         }
     }
 
-    suspend fun putUserNewInfo(sid: String, uid: Int, datiProfilo: ProfileData) {
+    suspend fun putUserNewInfo(uid: Int, datiProfilo: ProfileData) {
         Log.d(TAG, "putUserNewInfo")
 
         val url = "${CommunicationController.BASE_URL}/user/$uid"
@@ -124,8 +123,7 @@ object ApiCalls {
                     cardNumber = datiProfilo.cardNumber?: "",
                     cardExpireMonth = datiProfilo.cardExpireMonth?: 0,
                     cardExpireYear = datiProfilo.cardExpireYear?: 0,
-                    cardCVV = datiProfilo.cardCVV?: "",
-                    sid = sid
+                    cardCVV = datiProfilo.cardCVV?: ""
                 )
             )
 
@@ -354,16 +352,19 @@ object ApiCalls {
         }
     }
 
-    suspend fun getOrder(oid: Int, sid: String): Order {
+    suspend fun getOrder(oid: Int, currentLocation: Location ): Order {
         Log.d(TAG, "getOrder $oid")
 
         val url = "${CommunicationController.BASE_URL}/order/$oid"
 
-        return try {
+        try {
             val httpResponse = CommunicationController.genericRequest(
                 url,
                 CommunicationController.HttpMethod.GET,
-                queryParameters = mapOf("sid" to sid)
+                queryParameters = mapOf(
+                    "lat" to currentLocation.lat,
+                    "lng" to currentLocation.lng
+                )
             )
 
             val statusCode = httpResponse.status.value

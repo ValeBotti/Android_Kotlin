@@ -19,7 +19,7 @@ import androidx.core.net.toUri
 
 object CommunicationController {
     //val BASE_URL = "http://10.0.2.2:5077/api"//localhost
-    val BASE_URL = "http://192.168.1.16:5077/api"
+    val BASE_URL = "https://food-delivery-backend-amh8f8atbkftcmaa.italynorth-01.azurewebsites.net/api"
     var sid: String? = null
     private val TAG = CommunicationController::class.simpleName
 

@@ -67,6 +67,9 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.0.0")
     implementation("androidx.compose.material:material-icons-extended")
 
+    // Translating images URL
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     // Ktor
     implementation(libs.ktor.ktor.client.core)
     implementation(libs.ktor.client.android)
