@@ -4,6 +4,9 @@
 [![Android Studio](https://img.shields.io/badge/Android%20Studio-IDE-green?style=for-the-badge&logo=androidstudio&logoColor=white)](https://developer.android.com/studio)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-UI%20Framework-purple?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
 
+> The core concept, structure, and requirements for this project were provided by Professor Sergio Mascetti as part of the "Mobile Computing" course at UNIMI. 
+> I independently developed the full implementation by applying the knowledge and methodologies taught in class.
+
 A mobile application written in Kotlin using Android Studio and Jetpack Compose, designed as the frontend of a complete food‑delivery platform.
 > Beforehand, I created a cross-platform version of the project using the [React Native Framework](https://github.com/ValeBotti/React-Native-Uni-Project), then I created an [ASP.NET Core Web API web application](https://github.com/ValeBotti/ASP_NET_Core_Web_API) because the previous APIs had been discontinued.
 
@@ -18,33 +21,33 @@ This project presented me with a few challenges, such as:
 - PreferenceStorage for session persistence
 - Room Database for local caching and offline support
   
-[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQAPxBZuqFJNS4N0WywSQeGsAZGNn4xUa6tNhmYs6M-xQO4?e=4M3usG)
+[Project video](https://1drv.ms/v/c/e3188549c7d8abfc/IQA6Msk4mdmRQJMnACszsxheAVZjioAjhzYnK7m92JqiaVo?e=fs89JP)
 
 ## Architecture Overview
 
-1. [Presentation Layer - User Interface](#1-presentation-layer---user-interface)
+1. Presentation Layer - User Interface
 - Composable functions
 - State-driven rendering
 - Navigation Compose
 
-2. [ViewModel Layer — MVVM](#2-viewmodel-layer--mvvm)
+2. ViewModel Layer — MVVM
 -  StateFlow / MutableState
 -  Event handling
 -  Business logic
 
-3. [Data Layer](#3-data-layer)
+3. Data Layer
 - Room Database
 - PreferenceStorage
 
-4. [Networking — Retrofit + OkHttp](#4-networking--retrofit--okhttp)
+4. Networking — Retrofit + OkHttp
 - Retrofit (API interface)
 - OkHttp (client, logging)
 
-5. [Location & Mapbox Integration](#5-location--mapbox-integration)
+5. Location & Mapbox Integration
 - Request permission
 - Mapbox map rendering + dynamic markers
 
-6. [Lifecycle](#6-lifecycle)
+6. Lifecycle
 - Compose lifecycle
 - Handling app closure, background, resume
 
